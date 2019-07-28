@@ -1,0 +1,14 @@
+parameters:
+    level: 7
+    paths:
+        - src
+    ignoreErrors:
+        -
+            message: '#uploadedFiles#'
+            path: %currentWorkingDirectory%/src/PsrRequestFactory.php
+        -
+            message: '#createStreamFromFile#'
+            path: %currentWorkingDirectory%/src/PsrRequestFactory.php
+        -
+            message: '#createUploadedFile#'
+            path: %currentWorkingDirectory%/src/PsrRequestFactory.php
