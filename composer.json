@@ -31,7 +31,8 @@
         "nunomaduro/phpinsights": "^1.7",
         "phploc/phploc": "^5.0",
         "phpstan/phpstan": "^0.11.12",
-        "phpunit/phpunit": "^8.2.4"
+        "phpunit/phpunit": "^8.2.4",
+        "swoole/ide-helper": "@dev"
     },
     "autoload": {
         "psr-4": { "Chubbyphp\\SwooleRequestHandler\\": "src/" }
