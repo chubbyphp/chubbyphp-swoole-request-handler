@@ -27,7 +27,13 @@ Through [Composer](http://getcomposer.org) as [chubbyphp/chubbyphp-swoole-reques
 
 ## Usage
 
-This example uses [zendframework/zend-diactoros][7].
+### chubbyphp-framework
+
+#### Additional Requirements
+
+ * [chubbyphp/chubbyphp-framework][10]: ^1.1.1
+
+#### Example
 
 ```php
 <?php
@@ -36,22 +42,16 @@ declare(strict_types=1);
 
 namespace App;
 
+use Chubbyphp\Framework\Application;
 use Chubbyphp\SwooleRequestHandler\OnRequest;
 use Chubbyphp\SwooleRequestHandler\PsrRequestFactory;
 use Chubbyphp\SwooleRequestHandler\SwooleResponseEmitter;
-use Psr\Http\Message\ResponseFactoryInterface;
-use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\ServerRequestInterface;
-use Psr\Http\Server\RequestHandlerInterface;
 use Swoole\Http\Server;
-use Zend\Diactoros\ResponseFactory;
 use Zend\Diactoros\ServerRequestFactory;
 use Zend\Diactoros\StreamFactory;
 use Zend\Diactoros\UploadedFileFactory;
 
 $loader = require __DIR__.'/vendor/autoload.php';
-
-$responseFactory = new ResponseFactory();
 
 $http = new Server('localhost', 8080);
 
@@ -66,33 +66,128 @@ $http->on('request', new OnRequest(
         new UploadedFileFactory()
     ),
     new SwooleResponseEmitter(),
-    new class($responseFactory) implements RequestHandlerInterface {
+    new Application(...)
+));
+
+$http->start();
+
+```
+
+### slim 3
+
+#### Additional Requirements
+
+ * [http-interop/http-factory-slim][20]: ^2.0
+ * [slim/slim][21]: ^3.12.1
+
+#### Example
+
+```php
+<?php
+
+declare(strict_types=1);
+
+namespace App;
+
+use Chubbyphp\SwooleRequestHandler\OnRequest;
+use Chubbyphp\SwooleRequestHandler\PsrRequestFactory;
+use Chubbyphp\SwooleRequestHandler\SwooleResponseEmitter;
+use Http\Factory\Slim\ServerRequestFactory;
+use Http\Factory\Slim\StreamFactory;
+use Http\Factory\Slim\UploadedFileFactory;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Server\RequestHandlerInterface;
+use Slim\App;
+use Slim\Http\Response;
+use Swoole\Http\Server;
+
+$loader = require __DIR__.'/vendor/autoload.php';
+
+$app = new App();
+
+$http = new Server('localhost', 8080);
+
+$http->on('start', function (Server $server): void {
+    echo 'Swoole http server is started at http://localhost:8080'.PHP_EOL;
+});
+
+$http->on('request', new OnRequest(
+    new PsrRequestFactory(
+        new ServerRequestFactory(),
+        new StreamFactory(),
+        new UploadedFileFactory()
+    ),
+    new SwooleResponseEmitter(),
+    new class($app) implements RequestHandlerInterface
+    {
         /**
-         * @var ResponseFactoryInterface
+         * @var App
          */
-        private $responseFactory;
+        private $app;
 
         /**
-         * @param ResponseFactoryInterface $responseFactory
+         * @param App $app
          */
-        public function __construct(ResponseFactoryInterface $responseFactory)
+        public function __construct(App $app)
         {
-            $this->responseFactory = $responseFactory;
+            $this->app = $app;
         }
 
         /**
          * @param ServerRequestInterface $request
-         *
          * @return ResponseInterface
          */
         public function handle(ServerRequestInterface $request): ResponseInterface
         {
-            $response = $this->responseFactory->createResponse(200, 'OK');
-            $response->getBody()->write('It works!');
-
-            return $response;
+            return $this->app->process($request, new Response());
         }
     }
+));
+
+$http->start();
+```
+
+### zend-expressive 3
+
+#### Additional Requirements
+
+ * [zendframework/zend-expressive][30]: ^3.2.1
+
+#### Example
+
+```php
+<?php
+
+declare(strict_types=1);
+
+namespace App;
+
+use Chubbyphp\SwooleRequestHandler\OnRequest;
+use Chubbyphp\SwooleRequestHandler\PsrRequestFactory;
+use Chubbyphp\SwooleRequestHandler\SwooleResponseEmitter;
+use Swoole\Http\Server;
+use Zend\Diactoros\ServerRequestFactory;
+use Zend\Diactoros\StreamFactory;
+use Zend\Diactoros\UploadedFileFactory;
+use Zend\Expressive\Application;
+
+$loader = require __DIR__.'/vendor/autoload.php';
+
+$http = new Server('localhost', 8080);
+
+$http->on('start', function (Server $server): void {
+    echo 'Swoole http server is started at http://localhost:8080'.PHP_EOL;
+});
+
+$http->on('request', new OnRequest(
+    new PsrRequestFactory(
+        new ServerRequestFactory(),
+        new StreamFactory(),
+        new UploadedFileFactory()
+    ),
+    new SwooleResponseEmitter(),
+    new Application(...)
 ));
 
 $http->start();
@@ -108,5 +203,10 @@ Dominik Zogg 2019
 [4]: https://packagist.org/packages/psr/http-factory
 [5]: https://packagist.org/packages/psr/http-message
 [6]: https://packagist.org/packages/psr/http-server-handler
-[7]: https://packagist.org/packages/zendframework/zend-diactoros
 
+[10]: https://packagist.org/packages/chubbyphp/chubbyphp-framework
+
+[20]: https://packagist.org/packages/http-interop/http-factory-slim
+[21]: https://packagist.org/packages/slim/slim
+
+[30]: https://packagist.org/packages/zendframework/zend-expressive
