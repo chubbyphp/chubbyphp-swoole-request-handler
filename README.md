@@ -148,11 +148,62 @@ $http->on('request', new OnRequest(
 $http->start();
 ```
 
+### slim 4
+
+#### Additional Requirements
+
+ * [slim/psr7][30]: ^0.3
+ * [slim/slim][31]: ^4.0
+
+#### Example
+
+```php
+<?php
+
+declare(strict_types=1);
+
+namespace App;
+
+use Chubbyphp\SwooleRequestHandler\OnRequest;
+use Chubbyphp\SwooleRequestHandler\PsrRequestFactory;
+use Chubbyphp\SwooleRequestHandler\SwooleResponseEmitter;
+use Slim\Factory\AppFactory;
+use Slim\Psr7\Factory\ServerRequestFactory;
+use Slim\Psr7\Factory\StreamFactory;
+use Slim\Psr7\Factory\UploadedFileFactory;
+use Swoole\Http\Server;
+
+$loader = require __DIR__.'/vendor/autoload.php';
+
+$app = AppFactory::create();
+
+$app->addErrorMiddleware(true, true, true);
+
+$http = new Server('localhost', 8080);
+
+$http->on('start', function (Server $server): void {
+    echo 'Swoole http server is started at http://localhost:8080'.PHP_EOL;
+});
+
+$http->on('request', new OnRequest(
+    new PsrRequestFactory(
+        new ServerRequestFactory(),
+        new StreamFactory(),
+        new UploadedFileFactory()
+    ),
+    new SwooleResponseEmitter(),
+    $app
+));
+
+$http->start();
+
+```
+
 ### zend-expressive 3
 
 #### Additional Requirements
 
- * [zendframework/zend-expressive][30]: ^3.2.1
+ * [zendframework/zend-expressive][40]: ^3.2.1
 
 #### Example
 
@@ -209,4 +260,7 @@ Dominik Zogg 2019
 [20]: https://packagist.org/packages/http-interop/http-factory-slim
 [21]: https://packagist.org/packages/slim/slim
 
-[30]: https://packagist.org/packages/zendframework/zend-expressive
+[30]: https://packagist.org/packages/slim/psr7
+[31]: https://packagist.org/packages/slim/slim
+
+[40]: https://packagist.org/packages/zendframework/zend-expressive
