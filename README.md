@@ -142,7 +142,7 @@ $http->start();
 
 #### Additional Requirements
 
- * [slim/psr7][30]: ^0.3
+ * [slim/psr7][30]: ^0.4
  * [slim/slim][31]: ^4.0
 
 #### Example
