@@ -104,8 +104,6 @@ use Swoole\Http\Server;
 
 $loader = require __DIR__.'/vendor/autoload.php';
 
-$app = new App();
-
 $http = new Server('localhost', 8080);
 
 $http->on('start', function (Server $server): void {
@@ -121,17 +119,9 @@ $http->on('request', new OnRequest(
     new SwooleResponseEmitter(),
     new class($app) implements RequestHandlerInterface
     {
-        /**
-         * @var App
-         */
-        private $app;
-
-        /**
-         * @param App $app
-         */
-        public function __construct(App $app)
+        public function __construct()
         {
-            $this->app = $app;
+            $this->app = new App();
         }
 
         /**
@@ -167,17 +157,13 @@ namespace App;
 use Chubbyphp\SwooleRequestHandler\OnRequest;
 use Chubbyphp\SwooleRequestHandler\PsrRequestFactory;
 use Chubbyphp\SwooleRequestHandler\SwooleResponseEmitter;
-use Slim\Factory\AppFactory;
+use Slim\App;
 use Slim\Psr7\Factory\ServerRequestFactory;
 use Slim\Psr7\Factory\StreamFactory;
 use Slim\Psr7\Factory\UploadedFileFactory;
 use Swoole\Http\Server;
 
 $loader = require __DIR__.'/vendor/autoload.php';
-
-$app = AppFactory::create();
-
-$app->addErrorMiddleware(true, true, true);
 
 $http = new Server('localhost', 8080);
 
@@ -192,11 +178,10 @@ $http->on('request', new OnRequest(
         new UploadedFileFactory()
     ),
     new SwooleResponseEmitter(),
-    $app
+    new App(...)
 ));
 
 $http->start();
-
 ```
 
 ### zend-expressive 3
