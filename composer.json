@@ -18,13 +18,13 @@
     ],
     "require": {
         "php": "^7.2",
+        "ext-swoole": "*",
         "dflydev/fig-cookies": "^2.0",
         "psr/http-factory": "^1.0.1",
         "psr/http-message": "^1.0.1",
         "psr/http-server-handler": "^1.0.1"
     },
     "require-dev": {
-        "ext-swoole": "*",
         "chubbyphp/chubbyphp-mock": "^1.4",
         "friendsofphp/php-cs-fixer": "^2.15.1",
         "infection/infection": "^0.12.2",
