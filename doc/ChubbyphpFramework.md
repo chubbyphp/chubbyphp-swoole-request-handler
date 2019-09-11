@@ -24,6 +24,9 @@ use Zend\Diactoros\UploadedFileFactory;
 
 $loader = require __DIR__.'/vendor/autoload.php';
 
+/** @var Application $app*/
+$app = ...;
+
 $http = new Server('localhost', 8080);
 
 $http->on('start', function (Server $server): void {
@@ -37,7 +40,7 @@ $http->on('request', new OnRequest(
         new UploadedFileFactory()
     ),
     new SwooleResponseEmitter(),
-    new Application(...)
+    $app
 ));
 
 $http->start();

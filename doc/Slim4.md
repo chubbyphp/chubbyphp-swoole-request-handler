@@ -25,6 +25,9 @@ use Swoole\Http\Server;
 
 $loader = require __DIR__.'/vendor/autoload.php';
 
+/** @var App $app*/
+$app = ...;
+
 $http = new Server('localhost', 8080);
 
 $http->on('start', function (Server $server): void {
@@ -38,7 +41,7 @@ $http->on('request', new OnRequest(
         new UploadedFileFactory()
     ),
     new SwooleResponseEmitter(),
-    new App(...)
+    $app
 ));
 
 $http->start();
