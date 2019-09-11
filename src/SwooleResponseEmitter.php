@@ -30,7 +30,9 @@ final class SwooleResponseEmitter implements SwooleResponseEmitterInterface
         }
 
         while (!$body->eof()) {
-            $swooleResponse->write($body->read(256));
+            if ('' !== $chunk = $body->read(256)) {
+                $swooleResponse->write($chunk);
+            }
         }
 
         $swooleResponse->end();
