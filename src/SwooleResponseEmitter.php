@@ -23,17 +23,7 @@ final class SwooleResponseEmitter implements SwooleResponseEmitterInterface
             $this->mapCookie($swooleResponse, $setCookie);
         }
 
-        $body = $response->getBody();
-
-        if ($body->isSeekable()) {
-            $body->rewind();
-        }
-
-        while (!$body->eof()) {
-            if ('' !== $chunk = $body->read(256)) {
-                $swooleResponse->write($chunk);
-            }
-        }
+        $this->mapBody($response, $swooleResponse);
 
         $swooleResponse->end();
     }
@@ -49,5 +39,20 @@ final class SwooleResponseEmitter implements SwooleResponseEmitterInterface
             $cookie->getSecure(),
             $cookie->getHttpOnly()
         );
+    }
+
+    private function mapBody(ResponseInterface $response, SwooleResponse $swooleResponse): void
+    {
+        $body = $response->getBody();
+
+        if ($body->isSeekable()) {
+            $body->rewind();
+        }
+
+        while (!$body->eof()) {
+            if ('' !== $chunk = $body->read(256)) {
+                $swooleResponse->write($chunk);
+            }
+        }
     }
 }
