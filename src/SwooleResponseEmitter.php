@@ -37,8 +37,18 @@ final class SwooleResponseEmitter implements SwooleResponseEmitterInterface
             $cookie->getPath() ? $cookie->getPath() : '/',
             $cookie->getDomain() ? $cookie->getDomain() : '',
             $cookie->getSecure(),
-            $cookie->getHttpOnly()
+            $cookie->getHttpOnly(),
+            $this->mapSameSite($cookie)
         );
+    }
+
+    private function mapSameSite(SetCookie $cookie): ?string
+    {
+        if (null === $sameSite = $cookie->getSameSite()) {
+            return null;
+        }
+
+        return str_replace('SameSite=', '', $sameSite->asString());
     }
 
     private function mapBody(ResponseInterface $response, SwooleResponse $swooleResponse): void

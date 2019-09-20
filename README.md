@@ -15,7 +15,7 @@ A request handler adaper for swoole, using PSR 7, PSR 15 and PSR 17.
 ## Requirements
 
  * php: ^7.2
- * [ext-swoole][2]: *
+ * [ext-swoole][2]: ^4.4.6
  * [dflydev/fig-cookies][3]: ^2.0
  * [psr/http-factory][4]: ^1.0.1
  * [psr/http-message][5]: ^1.0.1
