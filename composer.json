@@ -26,19 +26,22 @@
     },
     "require-dev": {
         "chubbyphp/chubbyphp-mock": "^1.4",
-        "friendsofphp/php-cs-fixer": "^2.15.1",
-        "infection/infection": "^0.12.2",
-        "nunomaduro/phpinsights": "^1.7",
+        "friendsofphp/php-cs-fixer": "^2.15.3",
+        "infection/infection": "^0.14.1",
+        "nunomaduro/phpinsights": "^1.9",
         "phploc/phploc": "^5.0",
-        "phpstan/phpstan": "^0.11.12",
-        "phpunit/phpunit": "^8.2.4",
-        "swoole/ide-helper": "@dev"
+        "phpstan/phpstan": "^0.11.16",
+        "phpunit/phpunit": "^8.3.5",
+        "swoole/ide-helper": "^4.4.6"
     },
     "autoload": {
         "psr-4": { "Chubbyphp\\SwooleRequestHandler\\": "src/" }
     },
     "autoload-dev": {
         "psr-4": { "Chubbyphp\\Tests\\SwooleRequestHandler\\": "tests/" }
+    },
+    "config": {
+        "sort-packages": true
     },
     "extra": {
         "branch-alias": {
