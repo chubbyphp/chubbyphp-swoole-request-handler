@@ -46,4 +46,22 @@ $http->on('request', new OnRequest(
 $http->start();
 ```
 
+### with newrelic
+
+```php
+<?php
+
+declare(strict_types=1);
+
+namespace App;
+
+use Chubbyphp\SwooleRequestHandler\NewRelicOnRequestAdapter;
+use Chubbyphp\SwooleRequestHandler\OnRequest;
+
+/** @var OnRequest $onRequest */
+$onRequest = ...;
+
+$http->on('request', new NewRelicOnRequestAdapter(ini_get('newrelic.appname'), $onRequest);
+```
+
 [1]: https://packagist.org/packages/chubbyphp/chubbyphp-framework

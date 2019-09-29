@@ -8,7 +8,7 @@ use Psr\Http\Server\RequestHandlerInterface;
 use Swoole\Http\Request as SwooleRequest;
 use Swoole\Http\Response as SwooleResponse;
 
-final class OnRequest
+final class OnRequest implements OnRequestInterface
 {
     /**
      * @var PsrRequestFactoryInterface
@@ -35,11 +35,11 @@ final class OnRequest
         $this->requestHander = $requestHander;
     }
 
-    public function __invoke(SwooleRequest $request, SwooleResponse $response): void
+    public function __invoke(SwooleRequest $swooleRequest, SwooleResponse $swooleResponse): void
     {
         $this->swooleResponseEmitter->emit(
-            $this->requestHander->handle($this->psrRequestFactory->create($request)),
-            $response
+            $this->requestHander->handle($this->psrRequestFactory->create($swooleRequest)),
+            $swooleResponse
         );
     }
 }
