@@ -56,7 +56,7 @@ declare(strict_types=1);
 
 namespace App;
 
-use Chubbyphp\SwooleRequestHandler\NewRelicOnRequestAdapter;
+use Chubbyphp\SwooleRequestHandler\Adapter\NewRelicOnRequestAdapter;
 use Chubbyphp\SwooleRequestHandler\OnRequest;
 
 /** @var OnRequest $onRequest */

@@ -2,8 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Chubbyphp\SwooleRequestHandler;
+namespace Chubbyphp\SwooleRequestHandler\Adapter;
 
+use Chubbyphp\SwooleRequestHandler\OnRequestInterface;
 use Swoole\Http\Request as SwooleRequest;
 use Swoole\Http\Response as SwooleResponse;
 

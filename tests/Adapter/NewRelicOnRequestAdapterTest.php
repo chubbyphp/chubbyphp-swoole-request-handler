@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Chubbyphp\SwooleRequestHandler
+namespace Chubbyphp\SwooleRequestHandler\Adapter
 {
     final class TestExtesionLoaded
     {
@@ -95,22 +95,22 @@ namespace Chubbyphp\SwooleRequestHandler
     }
 }
 
-namespace Chubbyphp\Tests\SwooleRequestHandler\Unit
+namespace Chubbyphp\Tests\SwooleRequestHandler\Unit\Adapter
 {
     use Chubbyphp\Mock\Call;
     use Chubbyphp\Mock\MockByCallsTrait;
-    use Chubbyphp\SwooleRequestHandler\NewRelicOnRequestAdapter;
+    use Chubbyphp\SwooleRequestHandler\Adapter\NewRelicOnRequestAdapter;
+    use Chubbyphp\SwooleRequestHandler\Adapter\TestExtesionLoaded;
+    use Chubbyphp\SwooleRequestHandler\Adapter\TestNewRelicEndTransaction;
+    use Chubbyphp\SwooleRequestHandler\Adapter\TestNewRelicStartTransaction;
     use Chubbyphp\SwooleRequestHandler\OnRequestInterface;
-    use Chubbyphp\SwooleRequestHandler\TestExtesionLoaded;
-    use Chubbyphp\SwooleRequestHandler\TestNewRelicEndTransaction;
-    use Chubbyphp\SwooleRequestHandler\TestNewRelicStartTransaction;
     use PHPUnit\Framework\TestCase;
     use PHPUnit\SwooleRequestHandler\MockObject\MockObject;
     use Swoole\Http\Request as SwooleRequest;
     use Swoole\Http\Response as SwooleResponse;
 
     /**
-     * @covers \Chubbyphp\SwooleRequestHandler\NewRelicOnRequestAdapter
+     * @covers \Chubbyphp\SwooleRequestHandler\Adapter\NewRelicOnRequestAdapter
      *
      * @internal
      */
