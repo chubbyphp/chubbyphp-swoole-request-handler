@@ -49,6 +49,8 @@ $http->start();
 
 ### with newrelic
 
+### with newrelic
+
 ```php
 <?php
 
@@ -62,7 +64,11 @@ use Chubbyphp\SwooleRequestHandler\OnRequest;
 /** @var OnRequest $onRequest */
 $onRequest = ...;
 
-$http->on('request', new NewRelicOnRequestAdapter(ini_get('newrelic.appname'), $onRequest);
+if (extension_loaded('newrelic')) {
+    $onRequest = new NewRelicOnRequestAdapter($onRequest, ini_get('newrelic.appname'));
+}
+
+$http->on('request', $onRequest);
 ```
 
 [1]: https://packagist.org/packages/slim/psr7

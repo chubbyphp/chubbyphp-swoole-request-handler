@@ -4,34 +4,6 @@ declare(strict_types=1);
 
 namespace Chubbyphp\SwooleRequestHandler\Adapter
 {
-    final class TestExtesionLoaded
-    {
-        /**
-         * @var array<int, string>
-         */
-        private static $extensions = [];
-
-        public static function add(string $name): void
-        {
-            self::$extensions[] = $name;
-        }
-
-        public static function isLoaded(string $name): bool
-        {
-            return in_array($name, self::$extensions, true);
-        }
-
-        public static function reset(): void
-        {
-            self::$extensions = [];
-        }
-    }
-
-    function extension_loaded(string $name): bool
-    {
-        return TestExtesionLoaded::isLoaded($name);
-    }
-
     final class TestNewRelicStartTransaction
     {
         /**
@@ -100,7 +72,6 @@ namespace Chubbyphp\Tests\SwooleRequestHandler\Unit\Adapter
     use Chubbyphp\Mock\Call;
     use Chubbyphp\Mock\MockByCallsTrait;
     use Chubbyphp\SwooleRequestHandler\Adapter\NewRelicOnRequestAdapter;
-    use Chubbyphp\SwooleRequestHandler\Adapter\TestExtesionLoaded;
     use Chubbyphp\SwooleRequestHandler\Adapter\TestNewRelicEndTransaction;
     use Chubbyphp\SwooleRequestHandler\Adapter\TestNewRelicStartTransaction;
     use Chubbyphp\SwooleRequestHandler\OnRequestInterface;
@@ -118,9 +89,8 @@ namespace Chubbyphp\Tests\SwooleRequestHandler\Unit\Adapter
     {
         use MockByCallsTrait;
 
-        public function testWithoutNewRelicExtension(): void
+        public function testInvoke(): void
         {
-            TestExtesionLoaded::reset();
             TestNewRelicStartTransaction::reset();
             TestNewRelicEndTransaction::reset();
 
@@ -135,33 +105,7 @@ namespace Chubbyphp\Tests\SwooleRequestHandler\Unit\Adapter
                 Call::create('__invoke')->with($swooleRequest, $swooleResponse),
             ]);
 
-            $adapter = new NewRelicOnRequestAdapter('myapp', $onRequest);
-            $adapter($swooleRequest, $swooleResponse);
-
-            self::assertSame([], TestNewRelicStartTransaction::all());
-            self::assertSame([], TestNewRelicEndTransaction::all());
-        }
-
-        public function testWithNewRelicExtension(): void
-        {
-            TestExtesionLoaded::reset();
-            TestNewRelicStartTransaction::reset();
-            TestNewRelicEndTransaction::reset();
-
-            TestExtesionLoaded::add('newrelic');
-
-            /** @var SwooleRequest|MockObject $swooleRequest */
-            $swooleRequest = $this->getMockByCalls(SwooleRequest::class);
-
-            /** @var SwooleResponse|MockObject $swooleResponse */
-            $swooleResponse = $this->getMockByCalls(SwooleResponse::class);
-
-            /** @var OnRequestInterface|MockObject $onRequest */
-            $onRequest = $this->getMockByCalls(OnRequestInterface::class, [
-                Call::create('__invoke')->with($swooleRequest, $swooleResponse),
-            ]);
-
-            $adapter = new NewRelicOnRequestAdapter('myapp', $onRequest);
+            $adapter = new NewRelicOnRequestAdapter($onRequest, 'myapp');
             $adapter($swooleRequest, $swooleResponse);
 
             self::assertSame([['appname' => 'myapp', 'license' => null]], TestNewRelicStartTransaction::all());

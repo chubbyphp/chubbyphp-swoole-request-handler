@@ -11,29 +11,23 @@ use Swoole\Http\Response as SwooleResponse;
 final class NewRelicOnRequestAdapter implements OnRequestInterface
 {
     /**
-     * @var string
-     */
-    private $appname;
-
-    /**
      * @var OnRequestInterface
      */
     private $onRequest;
 
-    public function __construct(string $appname, OnRequestInterface $onRequest)
+    /**
+     * @var string
+     */
+    private $appname;
+
+    public function __construct(OnRequestInterface $onRequest, string $appname)
     {
-        $this->appname = $appname;
         $this->onRequest = $onRequest;
+        $this->appname = $appname;
     }
 
     public function __invoke(SwooleRequest $swooleRequest, SwooleResponse $swooleResponse): void
     {
-        if (!extension_loaded('newrelic')) {
-            $this->onRequest->__invoke($swooleRequest, $swooleResponse);
-
-            return;
-        }
-
         newrelic_start_transaction($this->appname);
 
         $this->onRequest->__invoke($swooleRequest, $swooleResponse);
