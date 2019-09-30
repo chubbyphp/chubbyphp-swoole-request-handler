@@ -47,7 +47,31 @@ $http->on('request', new OnRequest(
 $http->start();
 ```
 
-### with newrelic
+### with blackfire
+
+```php
+<?php
+
+declare(strict_types=1);
+
+namespace App;
+
+use Blackfire\Client;
+use Chubbyphp\SwooleRequestHandler\Adapter\BlackfireOnRequestAdapter;
+use Chubbyphp\SwooleRequestHandler\OnRequest;
+
+/** @var OnRequest $onRequest */
+$onRequest = ...;
+
+/** @var Client $client */
+$client = ...;
+
+if (null !== $client) {
+    $onRequest = new BlackfireOnRequestAdapter($onRequest, $client);
+}
+
+$http->on('request', $onRequest);
+```
 
 ### with newrelic
 

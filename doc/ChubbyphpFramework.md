@@ -46,6 +46,32 @@ $http->on('request', new OnRequest(
 $http->start();
 ```
 
+### with blackfire
+
+```php
+<?php
+
+declare(strict_types=1);
+
+namespace App;
+
+use Blackfire\Client;
+use Chubbyphp\SwooleRequestHandler\Adapter\BlackfireOnRequestAdapter;
+use Chubbyphp\SwooleRequestHandler\OnRequest;
+
+/** @var OnRequest $onRequest */
+$onRequest = ...;
+
+/** @var Client $client */
+$client = ...;
+
+if (null !== $client) {
+    $onRequest = new BlackfireOnRequestAdapter($onRequest, $client);
+}
+
+$http->on('request', $onRequest);
+```
+
 ### with newrelic
 
 ```php
@@ -66,7 +92,6 @@ if (extension_loaded('newrelic')) {
 }
 
 $http->on('request', $onRequest);
-```->on('request', new NewRelicOnRequestAdapter(ini_get('newrelic.appname'), $onRequest);
 ```
 
 [1]: https://packagist.org/packages/chubbyphp/chubbyphp-framework

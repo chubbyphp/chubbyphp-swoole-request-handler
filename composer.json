@@ -25,6 +25,7 @@
         "psr/http-server-handler": "^1.0.1"
     },
     "require-dev": {
+        "blackfire/php-sdk": "^1.19.1",
         "chubbyphp/chubbyphp-mock": "^1.4",
         "friendsofphp/php-cs-fixer": "^2.15.3",
         "infection/infection": "^0.14.1",
