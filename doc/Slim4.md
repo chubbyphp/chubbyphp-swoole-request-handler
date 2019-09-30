@@ -88,8 +88,8 @@ use Chubbyphp\SwooleRequestHandler\OnRequest;
 /** @var OnRequest $onRequest */
 $onRequest = ...;
 
-if (extension_loaded('newrelic')) {
-    $onRequest = new NewRelicOnRequestAdapter($onRequest, ini_get('newrelic.appname'));
+if (extension_loaded('newrelic') && false !== $name = ini_get('newrelic.appname')) {
+    $onRequest = new NewRelicOnRequestAdapter($onRequest, $name);
 }
 
 $http->on('request', $onRequest);
