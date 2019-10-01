@@ -62,11 +62,8 @@ use Chubbyphp\SwooleRequestHandler\OnRequest;
 /** @var OnRequest $onRequest */
 $onRequest = ...;
 
-/** @var Client $client */
-$client = ...;
-
-if (null !== $client) {
-    $onRequest = new BlackfireOnRequestAdapter($onRequest, $client);
+if (extension_loaded('blackfire') {
+    $onRequest = new BlackfireOnRequestAdapter($onRequest, new Client());
 }
 
 $http->on('request', $onRequest);
