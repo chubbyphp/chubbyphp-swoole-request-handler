@@ -1,6 +1,6 @@
 {
     "name": "chubbyphp/chubbyphp-swoole-request-handler",
-    "description": "A request handler adaper for swoole, using PSR 7, PSR 15 and PSR 17.",
+    "description": "A request handler adapter for swoole, using PSR-7, PSR-15 and PSR-17.",
     "keywords": [
         "chubbyphp",
         "requesthandler",

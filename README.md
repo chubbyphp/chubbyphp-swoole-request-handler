@@ -10,7 +10,7 @@
 
 ## Description
 
-A request handler adaper for swoole, using PSR 7, PSR 15 and PSR 17.
+A request handler adapter for swoole, using PSR-7, PSR-15 and PSR-17.
 
 ## Requirements
 
