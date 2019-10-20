@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Chubbyphp\Tests\SwooleRequestHandler\Adapter;
+namespace Chubbyphp\Tests\SwooleRequestHandler\Unit\Adapter;
 
 use Blackfire\Client;
 use Blackfire\Exception\LogicException;

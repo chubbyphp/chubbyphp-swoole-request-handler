@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Chubbyphp\Tests\SwooleRequestHandler;
+namespace Chubbyphp\Tests\SwooleRequestHandler\Unit;
 
 use Chubbyphp\Mock\Argument\ArgumentCallback;
 use Chubbyphp\Mock\Call;
