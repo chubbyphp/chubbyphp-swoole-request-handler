@@ -83,8 +83,6 @@ final class PsrRequestFactory implements PsrRequestFactoryInterface
 
     /**
      * @param array<string, int|string> $file
-     *
-     * @return UploadedFileInterface
      */
     private function createUploadedFile(array $file): UploadedFileInterface
     {
