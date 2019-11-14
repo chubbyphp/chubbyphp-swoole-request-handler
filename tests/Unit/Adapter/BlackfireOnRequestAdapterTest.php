@@ -28,7 +28,7 @@ final class BlackfireOnRequestAdapterTest extends TestCase
 {
     use MockByCallsTrait;
 
-    public function testInvokeWithoutConficAndWithoutLogger(): void
+    public function testInvokeWithoutConfigAndWithoutLogger(): void
     {
         /** @var SwooleRequest|MockObject $swooleRequest */
         $swooleRequest = $this->getMockByCalls(SwooleRequest::class);
@@ -57,7 +57,7 @@ final class BlackfireOnRequestAdapterTest extends TestCase
         $adapter($swooleRequest, $swooleResponse);
     }
 
-    public function testInvokeWithConficAndWithLogger(): void
+    public function testInvokeWithConfigAndWithLogger(): void
     {
         /** @var SwooleRequest|MockObject $swooleRequest */
         $swooleRequest = $this->getMockByCalls(SwooleRequest::class);

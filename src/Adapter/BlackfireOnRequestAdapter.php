@@ -6,6 +6,7 @@ namespace Chubbyphp\SwooleRequestHandler\Adapter;
 
 use Blackfire\Client;
 use Blackfire\Exception\ExceptionInterface;
+use Blackfire\Probe;
 use Blackfire\Profile\Configuration;
 use Chubbyphp\SwooleRequestHandler\OnRequestInterface;
 use Psr\Log\LoggerInterface;
@@ -49,18 +50,30 @@ final class BlackfireOnRequestAdapter implements OnRequestInterface
 
     public function __invoke(SwooleRequest $swooleRequest, SwooleResponse $swooleResponse): void
     {
+        $probe = $this->startProbe();
+
+        $this->onRequest->__invoke($swooleRequest, $swooleResponse);
+
+        if (null === $probe) {
+            return;
+        }
+
+        $this->endProbe($probe);
+    }
+
+    private function startProbe(): ?Probe
+    {
         try {
-            $probe = $this->client->createProbe($this->config);
+            return $this->client->createProbe($this->config);
         } catch (ExceptionInterface $exception) {
             $this->logger->error(sprintf('Blackfire exception: %s', $exception->getMessage()));
         }
 
-        $this->onRequest->__invoke($swooleRequest, $swooleResponse);
+        return null;
+    }
 
-        if (!isset($probe)) {
-            return;
-        }
-
+    private function endProbe(Probe $probe): void
+    {
         try {
             $this->client->endProbe($probe);
         } catch (ExceptionInterface $exception) {
