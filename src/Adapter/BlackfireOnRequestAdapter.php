@@ -50,6 +50,12 @@ final class BlackfireOnRequestAdapter implements OnRequestInterface
 
     public function __invoke(SwooleRequest $swooleRequest, SwooleResponse $swooleResponse): void
     {
+        if (!isset($swooleRequest->header['x-blackfire-query'])) {
+            $this->onRequest->__invoke($swooleRequest, $swooleResponse);
+
+            return;
+        }
+
         $probe = $this->startProbe();
 
         $this->onRequest->__invoke($swooleRequest, $swooleResponse);
