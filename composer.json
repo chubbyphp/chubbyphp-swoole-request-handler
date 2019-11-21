@@ -30,12 +30,12 @@
         "friendsofphp/php-cs-fixer": "^2.16",
         "infection/infection": "^0.14.2",
         "mavimo/phpstan-junit": "^0.2.3",
-        "nunomaduro/phpinsights": "^1.9",
-        "php-coveralls/php-coveralls": "^2.1",
+        "nunomaduro/phpinsights": "^1.10.3",
+        "php-coveralls/php-coveralls": "^2.2",
         "phploc/phploc": "^5.0",
         "phpstan/extension-installer": "^1.0.3",
         "phpstan/phpstan": "^0.11.19",
-        "phpunit/phpunit": "^8.4.2",
+        "phpunit/phpunit": "^8.4.3",
         "swoole/ide-helper": "^4.4.8"
     },
     "autoload": {
