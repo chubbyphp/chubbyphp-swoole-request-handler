@@ -27,9 +27,9 @@ Through [Composer](http://getcomposer.org) as [chubbyphp/chubbyphp-swoole-reques
 ## Usage
 
 * [Chubbyphp Framework][10]
-* [Slim 3][11]
-* [Slim 4][12]
-* [Zend Expressive][13]
+* [Mezzio][11]
+* [Slim 3][12]
+* [Slim 4][13]
 
 ## Copyright
 
@@ -43,6 +43,6 @@ Dominik Zogg 2019
 [6]: https://packagist.org/packages/psr/http-server-handler
 
 [10]: doc/ChubbyphpFramework.md
-[11]: doc/Slim3.md
-[12]: doc/Slim4.md
-[13]: doc/ZendExpressive.md
+[11]: doc/Mezzio.md
+[12]: doc/Slim3.md
+[13]: doc/Slim4.md

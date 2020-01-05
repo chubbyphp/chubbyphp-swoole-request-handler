@@ -1,8 +1,8 @@
-# Zend Expressive
+# Mezzio
 
 ## Requirements
 
-* [zendframework/zend-expressive][1]: ^3.2.1
+* [mezzio/mezzio][1]: ^3.2.1
 
 ## Example
 
@@ -16,11 +16,11 @@ namespace App;
 use Chubbyphp\SwooleRequestHandler\OnRequest;
 use Chubbyphp\SwooleRequestHandler\PsrRequestFactory;
 use Chubbyphp\SwooleRequestHandler\SwooleResponseEmitter;
+use Laminas\Diactoros\ServerRequestFactory;
+use Laminas\Diactoros\StreamFactory;
+use Laminas\Diactoros\UploadedFileFactory;
+use Mezzio\Application;
 use Swoole\Http\Server;
-use Zend\Diactoros\ServerRequestFactory;
-use Zend\Diactoros\StreamFactory;
-use Zend\Diactoros\UploadedFileFactory;
-use Zend\Expressive\Application;
 
 $loader = require __DIR__.'/vendor/autoload.php';
 
@@ -91,4 +91,4 @@ if (extension_loaded('newrelic') && false !== $name = ini_get('newrelic.appname'
 $http->on('request', $onRequest);
 ```
 
-[1]: https://packagist.org/packages/zendframework/zend-expressive
+[1]: https://packagist.org/packages/mezzio/mezzio
