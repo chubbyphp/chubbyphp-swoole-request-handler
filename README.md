@@ -33,7 +33,7 @@ Through [Composer](http://getcomposer.org) as [chubbyphp/chubbyphp-swoole-reques
 
 ## Copyright
 
-Dominik Zogg 2019
+Dominik Zogg 2020
 
 [1]: https://packagist.org/packages/chubbyphp/chubbyphp-swoole-request-handler
 [2]: https://www.swoole.co.uk
