@@ -26,11 +26,10 @@
     },
     "require-dev": {
         "blackfire/php-sdk": "^1.19.1",
+        "chubbyphp/chubbyphp-dev-helper": "dev-master",
         "chubbyphp/chubbyphp-mock": "^1.4.2",
-        "friendsofphp/php-cs-fixer": "^2.16.1",
         "infection/infection": "^0.15",
         "mavimo/phpstan-junit": "^0.3",
-        "nunomaduro/phpinsights": "^1.11.1",
         "php-coveralls/php-coveralls": "^2.2",
         "phploc/phploc": "^5.0",
         "phpstan/extension-installer": "^1.0.3",

@@ -16,7 +16,6 @@ matrix:
 
 before_script:
   - yes '' | pecl install swoole
-  - rm ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/xdebug.ini
   - echo 'extension=apcu.so' >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/apcu.ini
   - echo 'Europe/Zurich' | sudo tee /etc/timezone
   - echo 'date.timezone = "Europe/Zurich"' >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini
