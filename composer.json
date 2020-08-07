@@ -25,16 +25,16 @@
         "psr/http-server-handler": "^1.0.1"
     },
     "require-dev": {
-        "blackfire/php-sdk": "^1.19.1",
+        "blackfire/php-sdk": "^1.23",
         "chubbyphp/chubbyphp-dev-helper": "dev-master",
-        "chubbyphp/chubbyphp-mock": "^1.4.2",
-        "infection/infection": "^0.15",
+        "chubbyphp/chubbyphp-mock": "^1.4.5",
+        "infection/infection": "^0.15.3|^0.16.4",
         "mavimo/phpstan-junit": "^0.3",
         "php-coveralls/php-coveralls": "^2.2",
-        "phploc/phploc": "^5.0",
-        "phpstan/extension-installer": "^1.0.3",
-        "phpstan/phpstan": "^0.12.3",
-        "phpunit/phpunit": "^8.5.1",
+        "phploc/phploc": "^5.0|^6.0.2",
+        "phpstan/extension-installer": "^1.0.4",
+        "phpstan/phpstan": "^0.12.36",
+        "phpunit/phpunit": "^8.5.8|^9.3.1",
         "swoole/ide-helper": "^4.4.8"
     },
     "autoload": {
