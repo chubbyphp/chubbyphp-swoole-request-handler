@@ -17,7 +17,7 @@
         }
     ],
     "require": {
-        "php": "^7.2",
+        "php": "^7.2|^8.0",
         "ext-swoole": "^4.4.8",
         "dflydev/fig-cookies": "^2.0",
         "psr/http-factory": "^1.0.1",
@@ -28,13 +28,18 @@
         "blackfire/php-sdk": "^1.23",
         "chubbyphp/chubbyphp-dev-helper": "dev-master",
         "chubbyphp/chubbyphp-mock": "^1.4.5",
-        "infection/infection": "^0.15.3|^0.16.4",
-        "php-coveralls/php-coveralls": "^2.2",
+        "friendsofphp/php-cs-fixer": "^2.16@dev",
+        "infection/infection": "^0.15.3|^0.16.6|^0.18.0",
+        "php-coveralls/php-coveralls": "^2.4.1",
         "phploc/phploc": "^5.0|^6.0.2",
-        "phpstan/extension-installer": "^1.0.4",
-        "phpstan/phpstan": "^0.12.36",
-        "phpunit/phpunit": "^8.5.8|^9.3.1",
+        "phpstan/extension-installer": "^1.0.5",
+        "phpstan/phpstan": "^0.12.50",
+        "phpunit/phpunit": "^8.5.8|^9.4.1",
         "swoole/ide-helper": "^4.4.8"
+    },
+    "conflict": {
+        "composer/composer": "<1.10.16",
+        "ocramius/package-versions": ">=1.10"
     },
     "autoload": {
         "psr-4": { "Chubbyphp\\SwooleRequestHandler\\": "src/" }
@@ -62,7 +67,7 @@
             "@test:cs",
             "@test:insights"
         ],
-        "test:cs": "mkdir -p build && vendor/bin/php-cs-fixer fix --dry-run --stop-on-violation --cache-file=build/phpcs.cache",
+        "test:cs": "mkdir -p build && PHP_CS_FIXER_IGNORE_ENV=1 vendor/bin/php-cs-fixer fix --dry-run --stop-on-violation --cache-file=build/phpcs.cache",
         "test:infection": "vendor/bin/infection --threads=$(nproc) --min-msi=100 --verbose --coverage=build/phpunit",
         "test:insights": "mkdir -p build && bash -c 'vendor/bin/phpinsights analyse -v --no-interaction --min-quality=100 --disable-security-check | tee build/phpinsights.log; if [ ${PIPESTATUS[0]} -ne \"0\" ]; then exit 1; fi'",
         "test:integration": "vendor/bin/phpunit --testsuite=Integration --cache-result-file=build/phpunit/result.cache",
