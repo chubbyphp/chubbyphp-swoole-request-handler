@@ -62,7 +62,8 @@ final class SwooleResponseEmitterTest extends TestCase
                     '',
                     true,
                     true,
-                    'Strict'
+                    'Strict',
+                    null
                 ),
             Call::create('write')->with('This is the body.'),
             Call::create('end')->with(null),
@@ -112,6 +113,7 @@ final class SwooleResponseEmitterTest extends TestCase
                     '',
                     true,
                     true,
+                    null,
                     null
                 ),
             Call::create('end')->with(null),
