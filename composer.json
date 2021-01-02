@@ -17,7 +17,7 @@
         }
     ],
     "require": {
-        "php": "^7.2|^8.0",
+        "php": "^7.4|^8.0",
         "ext-swoole": "^4.5.8",
         "dflydev/fig-cookies": "^2.0",
         "psr/http-factory": "^1.0.1",
@@ -27,18 +27,14 @@
     "require-dev": {
         "blackfire/php-sdk": "^1.23",
         "chubbyphp/chubbyphp-dev-helper": "dev-master",
-        "chubbyphp/chubbyphp-mock": "^1.4.5",
-        "friendsofphp/php-cs-fixer": "^2.16@dev",
-        "infection/infection": "^0.15.3|^0.16.6|^0.18.0",
-        "php-coveralls/php-coveralls": "^2.4.1",
-        "phploc/phploc": "^5.0|^6.0.2",
-        "phpstan/extension-installer": "^1.0.5",
-        "phpstan/phpstan": "^0.12.50",
-        "phpunit/phpunit": "^8.5.8|^9.4.1",
+        "chubbyphp/chubbyphp-mock": "^1.6",
+        "infection/infection": "^0.20.2",
+        "php-coveralls/php-coveralls": "^2.4.3",
+        "phploc/phploc": "^6.0.2",
+        "phpstan/extension-installer": "^1.1",
+        "phpstan/phpstan": "^0.12.64",
+        "phpunit/phpunit": "^9.5",
         "swoole/ide-helper": "^4.5.8"
-    },
-    "conflict": {
-        "composer/composer": "<1.10.16"
     },
     "autoload": {
         "psr-4": { "Chubbyphp\\SwooleRequestHandler\\": "src/" }
@@ -51,7 +47,7 @@
     },
     "extra": {
         "branch-alias": {
-            "dev-master": "1.0-dev"
+            "dev-master": "1.1-dev"
         }
     },
     "scripts": {
@@ -63,12 +59,10 @@
             "@test:infection",
             "@test:static-analysis",
             "@test:loc",
-            "@test:cs",
-            "@test:insights"
+            "@test:cs"
         ],
         "test:cs": "mkdir -p build && PHP_CS_FIXER_IGNORE_ENV=1 vendor/bin/php-cs-fixer fix --dry-run --stop-on-violation --cache-file=build/phpcs.cache",
         "test:infection": "vendor/bin/infection --threads=$(nproc) --min-msi=100 --verbose --coverage=build/phpunit",
-        "test:insights": "mkdir -p build && bash -c 'vendor/bin/phpinsights analyse -v --no-interaction --min-quality=100 --disable-security-check | tee build/phpinsights.log; if [ ${PIPESTATUS[0]} -ne \"0\" ]; then exit 1; fi'",
         "test:integration": "vendor/bin/phpunit --testsuite=Integration --cache-result-file=build/phpunit/result.cache",
         "test:lint": "mkdir -p build && find src tests -name '*.php' -print0 | xargs -0 -n1 -P$(nproc) php -l | tee build/phplint.log",
         "test:loc": "mkdir -p build && vendor/bin/phploc src --verbose | tee build/phploc.log",

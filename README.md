@@ -25,7 +25,7 @@ A request handler adapter for swoole, using PSR-7, PSR-15 and PSR-17.
 
 ## Requirements
 
- * php: ^7.2|^8.0
+ * php: ^7.4|^8.0
  * [ext-swoole][2]: ^4.4.8
  * [dflydev/fig-cookies][3]: ^2.0
  * [psr/http-factory][4]: ^1.0.1
@@ -37,7 +37,7 @@ A request handler adapter for swoole, using PSR-7, PSR-15 and PSR-17.
 Through [Composer](http://getcomposer.org) as [chubbyphp/chubbyphp-swoole-request-handler][1].
 
 ```sh
-composer require chubbyphp/chubbyphp-swoole-request-handler "^1.0"
+composer require chubbyphp/chubbyphp-swoole-request-handler "^1.1"
 ```
 
 ## Usage

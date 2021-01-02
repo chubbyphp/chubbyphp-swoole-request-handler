@@ -13,20 +13,11 @@ use Swoole\Http\Request as SwooleRequest;
 
 final class PsrRequestFactory implements PsrRequestFactoryInterface
 {
-    /**
-     * @var ServerRequestFactoryInterface
-     */
-    private $serverRequestFactory;
+    private ServerRequestFactoryInterface $serverRequestFactory;
 
-    /**
-     * @var StreamFactoryInterface
-     */
-    private $streamFactory;
+    private StreamFactoryInterface $streamFactory;
 
-    /**
-     * @var UploadedFileFactoryInterface
-     */
-    private $uploadedFileFactory;
+    private UploadedFileFactoryInterface $uploadedFileFactory;
 
     public function __construct(
         ServerRequestFactoryInterface $serverRequestFactory,

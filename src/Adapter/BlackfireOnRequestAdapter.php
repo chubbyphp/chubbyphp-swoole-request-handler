@@ -16,25 +16,13 @@ use Swoole\Http\Response as SwooleResponse;
 
 final class BlackfireOnRequestAdapter implements OnRequestInterface
 {
-    /**
-     * @var OnRequestInterface
-     */
-    private $onRequest;
+    private OnRequestInterface $onRequest;
 
-    /**
-     * @var Client
-     */
-    private $client;
+    private Client $client;
 
-    /**
-     * @var Configuration
-     */
-    private $config;
+    private Configuration $config;
 
-    /**
-     * @var LoggerInterface
-     */
-    private $logger;
+    private LoggerInterface $logger;
 
     public function __construct(
         OnRequestInterface $onRequest,

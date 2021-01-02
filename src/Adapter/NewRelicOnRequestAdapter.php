@@ -10,15 +10,9 @@ use Swoole\Http\Response as SwooleResponse;
 
 final class NewRelicOnRequestAdapter implements OnRequestInterface
 {
-    /**
-     * @var OnRequestInterface
-     */
-    private $onRequest;
+    private OnRequestInterface $onRequest;
 
-    /**
-     * @var string
-     */
-    private $appname;
+    private string $appname;
 
     public function __construct(OnRequestInterface $onRequest, string $appname)
     {
