@@ -140,7 +140,7 @@ final class PsrRequestFactoryTest extends TestCase
             Call::create('withParsedBody')->with($swooleRequest->post)->willReturnSelf(),
             Call::create('withUploadedFiles')
                 ->with(new ArgumentCallback(
-                    function (array $uploadedFiles) use ($uploadedFile1, $uploadedFile2, $uploadedFile3): void {
+                    static function (array $uploadedFiles) use ($uploadedFile1, $uploadedFile2, $uploadedFile3): void {
                         self::assertArrayHasKey('cv', $uploadedFiles);
 
                         self::assertSame($uploadedFile1, $uploadedFiles['cv']);
