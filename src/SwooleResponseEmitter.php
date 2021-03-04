@@ -32,7 +32,7 @@ final class SwooleResponseEmitter implements SwooleResponseEmitterInterface
     {
         $swooleResponse->cookie(
             $cookie->getName(),
-            $cookie->getValue(),
+            $cookie->getValue() ? $cookie->getValue() : '',
             $cookie->getExpires(),
             $cookie->getPath() ? $cookie->getPath() : '/',
             $cookie->getDomain() ? $cookie->getDomain() : '',
@@ -42,10 +42,10 @@ final class SwooleResponseEmitter implements SwooleResponseEmitterInterface
         );
     }
 
-    private function mapSameSite(SetCookie $cookie): ?string
+    private function mapSameSite(SetCookie $cookie): string
     {
         if (null === $sameSite = $cookie->getSameSite()) {
-            return null;
+            return '';
         }
 
         return str_replace('SameSite=', '', $sameSite->asString());

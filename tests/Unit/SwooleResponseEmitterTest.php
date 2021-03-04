@@ -113,7 +113,7 @@ final class SwooleResponseEmitterTest extends TestCase
                     '',
                     true,
                     true,
-                    null,
+                    '',
                     null
                 ),
             Call::create('end')->with(null),
