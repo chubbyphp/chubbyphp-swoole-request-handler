@@ -45,7 +45,7 @@ final class SwooleResponseEmitterTest extends TestCase
             Call::create('withoutHeader')->with('Set-Cookie')->willReturn($responseWithoutCookies),
             Call::create('getHeader')
                 ->with('Set-Cookie')
-                ->willReturn(['id=a3fWa; Expires=Wed, 21 Oct 2015 07:28:00 GMT; Secure; HttpOnly; SameSite=strict']),
+                ->willReturn(['id=a3fWa; Expires=Wed, 21 Oct 2015 07:28:00 GMT; Domain=some-domain.org; Path=/some/path; Secure; HttpOnly; SameSite=strict']),
             Call::create('getBody')->with()->willReturn($responseBody),
         ]);
 
@@ -58,8 +58,8 @@ final class SwooleResponseEmitterTest extends TestCase
                     'id',
                     'a3fWa',
                     1445412480,
-                    '/',
-                    '',
+                    '/some/path',
+                    'some-domain.org',
                     true,
                     true,
                     'Strict',
