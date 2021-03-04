@@ -32,10 +32,10 @@ final class SwooleResponseEmitter implements SwooleResponseEmitterInterface
     {
         $swooleResponse->cookie(
             $cookie->getName(),
-            $cookie->getValue() ? $cookie->getValue() : '',
+            $cookie->getValue() ?? '',
             $cookie->getExpires(),
-            $cookie->getPath() ? $cookie->getPath() : '/',
-            $cookie->getDomain() ? $cookie->getDomain() : '',
+            $cookie->getPath() ?? '/',
+            $cookie->getDomain() ?? '',
             $cookie->getSecure(),
             $cookie->getHttpOnly(),
             $this->mapSameSite($cookie)
