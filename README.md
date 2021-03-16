@@ -50,9 +50,9 @@ declare(strict_types=1);
 
 namespace App;
 
-use Chubbyphp\WorkermanRequestHandler\OnRequest;
-use Chubbyphp\WorkermanRequestHandler\PsrRequestFactory;
-use Chubbyphp\WorkermanRequestHandler\WorkermanResponseEmitter;
+use Chubbyphp\SwooleRequestHandler\OnRequest;
+use Chubbyphp\SwooleRequestHandler\PsrRequestFactory;
+use Chubbyphp\SwooleRequestHandler\SwooleResponseEmitter;
 use Psr\Http\Server\RequestHandlerInterface;
 use Some\Psr17\Factory\ServerRequestFactory;
 use Some\Psr17\Factory\StreamFactory;
