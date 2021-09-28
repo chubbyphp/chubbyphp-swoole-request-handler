@@ -32,6 +32,7 @@ A request handler adapter for swoole, using PSR-7, PSR-15 and PSR-17.
  * [psr/http-factory][4]: ^1.0.1
  * [psr/http-message][5]: ^1.0.1
  * [psr/http-server-handler][6]: ^1.0.1
+ * [psr/log][7]: ^1.1.4
 
 ## Installation
 
@@ -138,3 +139,4 @@ Dominik Zogg 2021
 [4]: https://packagist.org/packages/psr/http-factory
 [5]: https://packagist.org/packages/psr/http-message
 [6]: https://packagist.org/packages/psr/http-server-handler
+[7]: https://packagist.org/packages/psr/log

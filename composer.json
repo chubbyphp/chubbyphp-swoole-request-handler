@@ -22,7 +22,8 @@
         "dflydev/fig-cookies": "^2.0|^3.0",
         "psr/http-factory": "^1.0.1",
         "psr/http-message": "^1.0.1",
-        "psr/http-server-handler": "^1.0.1"
+        "psr/http-server-handler": "^1.0.1",
+        "psr/log": "^1.1.4"
     },
     "require-dev": {
         "blackfire/php-sdk": "^1.23",
