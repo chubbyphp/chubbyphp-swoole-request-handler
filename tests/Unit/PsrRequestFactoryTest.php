@@ -29,7 +29,7 @@ final class PsrRequestFactoryTest extends TestCase
 
     public function testInvoke(): void
     {
-        /** @var SwooleRequest|MockObject $swooleRequest */
+        /** @var MockObject|SwooleRequest $swooleRequest */
         $swooleRequest = $this->getMockByCalls(SwooleRequest::class, [
             Call::create('rawContent')->with()->willReturn('This is the body.'),
         ]);
@@ -84,23 +84,23 @@ final class PsrRequestFactoryTest extends TestCase
             ],
         ];
 
-        /** @var StreamInterface|MockObject $requestBody */
+        /** @var MockObject|StreamInterface $requestBody */
         $requestBody = $this->getMockByCalls(StreamInterface::class, [
             Call::create('write')->with('This is the body.'),
         ]);
 
-        /** @var StreamInterface|MockObject $uploadedFileStream1 */
+        /** @var MockObject|StreamInterface $uploadedFileStream1 */
         $uploadedFileStream1 = $this->getMockByCalls(StreamInterface::class);
 
-        /** @var StreamInterface|MockObject $uploadedFileStream2 */
+        /** @var MockObject|StreamInterface $uploadedFileStream2 */
         $uploadedFileStream2 = $this->getMockByCalls(StreamInterface::class);
 
-        /** @var StreamInterface|MockObject $uploadedFileStream3 */
+        /** @var MockObject|StreamInterface $uploadedFileStream3 */
         $uploadedFileStream3 = $this->getMockByCalls(StreamInterface::class);
 
         $uploadedFileException = new \RuntimeException('test');
 
-        /** @var StreamFactoryInterface|MockObject $streamFactory */
+        /** @var MockObject|StreamFactoryInterface $streamFactory */
         $streamFactory = $this->getMockByCalls(StreamFactoryInterface::class, [
             Call::create('createStreamFromFile')->with('/tmp/php9875842a', 'r')->willReturn($uploadedFileStream1),
             Call::create('createStreamFromFile')->with('/tmp/php8d5f55ce', 'r')->willReturn($uploadedFileStream2),
@@ -110,16 +110,16 @@ final class PsrRequestFactoryTest extends TestCase
             Call::create('createStream')->with('')->willReturn($uploadedFileStream3),
         ]);
 
-        /** @var UploadedFileInterface|MockObject $uploadedFile1 */
+        /** @var MockObject|UploadedFileInterface $uploadedFile1 */
         $uploadedFile1 = $this->getMockByCalls(UploadedFileInterface::class);
 
-        /** @var UploadedFileInterface|MockObject $uploadedFile2 */
+        /** @var MockObject|UploadedFileInterface $uploadedFile2 */
         $uploadedFile2 = $this->getMockByCalls(UploadedFileInterface::class);
 
-        /** @var UploadedFileInterface|MockObject $uploadedFile3 */
+        /** @var MockObject|UploadedFileInterface $uploadedFile3 */
         $uploadedFile3 = $this->getMockByCalls(UploadedFileInterface::class);
 
-        /** @var UploadedFileFactoryInterface|MockObject $uploadedFileFactory */
+        /** @var MockObject|UploadedFileFactoryInterface $uploadedFileFactory */
         $uploadedFileFactory = $this->getMockByCalls(UploadedFileFactoryInterface::class, [
             Call::create('createUploadedFile')
                 ->with($uploadedFileStream1, 1048576, 0, 'CV.pdf', 'application/pdf')
@@ -132,7 +132,7 @@ final class PsrRequestFactoryTest extends TestCase
                 ->willReturn($uploadedFile3),
         ]);
 
-        /** @var ServerRequestInterface|MockObject $request */
+        /** @var MockObject|ServerRequestInterface $request */
         $request = $this->getMockByCalls(ServerRequestInterface::class, [
             Call::create('withHeader')->with('Content-Type', 'multipart/form-data')->willReturnSelf(),
             Call::create('withCookieParams')->with($swooleRequest->cookie)->willReturnSelf(),
@@ -157,7 +157,7 @@ final class PsrRequestFactoryTest extends TestCase
             Call::create('getBody')->with()->willReturn($requestBody),
         ]);
 
-        /** @var ServerRequestFactoryInterface|MockObject $serverRequestFactory */
+        /** @var MockObject|ServerRequestFactoryInterface $serverRequestFactory */
         $serverRequestFactory = $this->getMockByCalls(ServerRequestFactoryInterface::class, [
             Call::create('createServerRequest')
                 ->with('POST', '/application', ['REQUEST_METHOD' => 'POST', 'REQUEST_URI' => '/application'])

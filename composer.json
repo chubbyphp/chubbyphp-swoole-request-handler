@@ -29,12 +29,12 @@
         "blackfire/php-sdk": "^1.23",
         "chubbyphp/chubbyphp-dev-helper": "dev-master",
         "chubbyphp/chubbyphp-mock": "^1.6",
-        "infection/infection": "^0.20.2",
+        "infection/infection": "^0.25.2",
         "php-coveralls/php-coveralls": "^2.4.3",
         "phploc/phploc": "^7.0.2",
         "phpstan/extension-installer": "^1.1",
-        "phpstan/phpstan": "^0.12.64",
-        "phpunit/phpunit": "^9.5",
+        "phpstan/phpstan": "^0.12.99",
+        "phpunit/phpunit": "^9.5.10",
         "swoole/ide-helper": "^4.5.8"
     },
     "autoload": {

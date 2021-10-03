@@ -28,29 +28,29 @@ final class OnRequestTest extends TestCase
 
     public function testInvoke(): void
     {
-        /** @var SwooleRequest|MockObject $swooleRequest */
+        /** @var MockObject|SwooleRequest $swooleRequest */
         $swooleRequest = $this->getMockByCalls(SwooleRequest::class);
 
-        /** @var SwooleResponse|MockObject $swooleResponse */
+        /** @var MockObject|SwooleResponse $swooleResponse */
         $swooleResponse = $this->getMockByCalls(SwooleResponse::class);
 
-        /** @var ServerRequestInterface|MockObject $request */
+        /** @var MockObject|ServerRequestInterface $request */
         $request = $this->getMockByCalls(ServerRequestInterface::class);
 
-        /** @var ResponseInterface|MockObject $response */
+        /** @var MockObject|ResponseInterface $response */
         $response = $this->getMockByCalls(ResponseInterface::class);
 
-        /** @var PsrRequestFactoryInterface|MockObject $psrRequestFactory */
+        /** @var MockObject|PsrRequestFactoryInterface $psrRequestFactory */
         $psrRequestFactory = $this->getMockByCalls(PsrRequestFactoryInterface::class, [
             Call::create('create')->with($swooleRequest)->willReturn($request),
         ]);
 
-        /** @var SwooleResponseEmitterInterface|MockObject $swooleResponseEmitter */
+        /** @var MockObject|SwooleResponseEmitterInterface $swooleResponseEmitter */
         $swooleResponseEmitter = $this->getMockByCalls(SwooleResponseEmitterInterface::class, [
             Call::create('emit')->with($response, $swooleResponse),
         ]);
 
-        /** @var RequestHandlerInterface|MockObject $swooleRequestHandler */
+        /** @var MockObject|RequestHandlerInterface $swooleRequestHandler */
         $swooleRequestHandler = $this->getMockByCalls(RequestHandlerInterface::class, [
             Call::create('handle')->with($request)->willReturn($response),
         ]);

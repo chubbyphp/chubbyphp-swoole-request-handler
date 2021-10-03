@@ -24,12 +24,12 @@ final class SwooleResponseEmitterTest extends TestCase
 
     public function testInvoke(): void
     {
-        /** @var ResponseInterface|MockObject $responseWithoutCookies */
+        /** @var MockObject|ResponseInterface $responseWithoutCookies */
         $responseWithoutCookies = $this->getMockByCalls(ResponseInterface::class, [
             Call::create('getHeaders')->with()->willReturn(['Content-Type' => ['application/json']]),
         ]);
 
-        /** @var StreamInterface|MockObject $responseBody */
+        /** @var MockObject|StreamInterface $responseBody */
         $responseBody = $this->getMockByCalls(StreamInterface::class, [
             Call::create('isSeekable')->with()->willReturn(true),
             Call::create('rewind')->with(),
@@ -38,7 +38,7 @@ final class SwooleResponseEmitterTest extends TestCase
             Call::create('eof')->willReturn(true),
         ]);
 
-        /** @var ResponseInterface|MockObject $response */
+        /** @var MockObject|ResponseInterface $response */
         $response = $this->getMockByCalls(ResponseInterface::class, [
             Call::create('getStatusCode')->with()->willReturn(200),
             Call::create('getReasonPhrase')->with()->willReturn('OK'),
@@ -49,7 +49,7 @@ final class SwooleResponseEmitterTest extends TestCase
             Call::create('getBody')->with()->willReturn($responseBody),
         ]);
 
-        /** @var SwooleResponse|MockObject $swooleResponse */
+        /** @var MockObject|SwooleResponse $swooleResponse */
         $swooleResponse = $this->getMockByCalls(SwooleResponse::class, [
             Call::create('status')->with(200, 'OK'),
             Call::create('header')->with('Content-Type', 'application/json', null),
@@ -75,12 +75,12 @@ final class SwooleResponseEmitterTest extends TestCase
 
     public function testInvokeWithEmptyBody(): void
     {
-        /** @var ResponseInterface|MockObject $responseWithoutCookies */
+        /** @var MockObject|ResponseInterface $responseWithoutCookies */
         $responseWithoutCookies = $this->getMockByCalls(ResponseInterface::class, [
             Call::create('getHeaders')->with()->willReturn(['Content-Type' => ['application/json']]),
         ]);
 
-        /** @var StreamInterface|MockObject $responseBody */
+        /** @var MockObject|StreamInterface $responseBody */
         $responseBody = $this->getMockByCalls(StreamInterface::class, [
             Call::create('isSeekable')->with()->willReturn(true),
             Call::create('rewind')->with(),
@@ -89,7 +89,7 @@ final class SwooleResponseEmitterTest extends TestCase
             Call::create('eof')->willReturn(true),
         ]);
 
-        /** @var ResponseInterface|MockObject $response */
+        /** @var MockObject|ResponseInterface $response */
         $response = $this->getMockByCalls(ResponseInterface::class, [
             Call::create('getStatusCode')->with()->willReturn(200),
             Call::create('getReasonPhrase')->with()->willReturn('OK'),
@@ -100,7 +100,7 @@ final class SwooleResponseEmitterTest extends TestCase
             Call::create('getBody')->with()->willReturn($responseBody),
         ]);
 
-        /** @var SwooleResponse|MockObject $swooleResponse */
+        /** @var MockObject|SwooleResponse $swooleResponse */
         $swooleResponse = $this->getMockByCalls(SwooleResponse::class, [
             Call::create('status')->with(200, 'OK'),
             Call::create('header')->with('Content-Type', 'application/json', null),

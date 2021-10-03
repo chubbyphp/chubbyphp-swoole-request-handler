@@ -30,13 +30,13 @@ final class BlackfireOnRequestAdapterTest extends TestCase
 
     public function testInvokeWithoutHeaderWithoutConfigAndWithoutLogger(): void
     {
-        /** @var SwooleRequest|MockObject $swooleRequest */
+        /** @var MockObject|SwooleRequest $swooleRequest */
         $swooleRequest = $this->getMockByCalls(SwooleRequest::class);
 
-        /** @var SwooleResponse|MockObject $swooleResponse */
+        /** @var MockObject|SwooleResponse $swooleResponse */
         $swooleResponse = $this->getMockByCalls(SwooleResponse::class);
 
-        /** @var OnRequestInterface|MockObject $onRequest */
+        /** @var MockObject|OnRequestInterface $onRequest */
         $onRequest = $this->getMockByCalls(OnRequestInterface::class, [
             Call::create('__invoke')->with($swooleRequest, $swooleResponse),
         ]);
@@ -50,19 +50,19 @@ final class BlackfireOnRequestAdapterTest extends TestCase
 
     public function testInvokeWithoutConfigAndWithoutLogger(): void
     {
-        /** @var SwooleRequest|MockObject $swooleRequest */
+        /** @var MockObject|SwooleRequest $swooleRequest */
         $swooleRequest = $this->getMockByCalls(SwooleRequest::class);
         $swooleRequest->header['x-blackfire-query'] = 'swoole';
 
-        /** @var SwooleResponse|MockObject $swooleResponse */
+        /** @var MockObject|SwooleResponse $swooleResponse */
         $swooleResponse = $this->getMockByCalls(SwooleResponse::class);
 
-        /** @var OnRequestInterface|MockObject $onRequest */
+        /** @var MockObject|OnRequestInterface $onRequest */
         $onRequest = $this->getMockByCalls(OnRequestInterface::class, [
             Call::create('__invoke')->with($swooleRequest, $swooleResponse),
         ]);
 
-        /** @var Probe|MockObject $probe */
+        /** @var MockObject|Probe $probe */
         $probe = $this->getMockByCalls(Probe::class);
 
         /** @var Client|MockObject $client */
@@ -77,14 +77,14 @@ final class BlackfireOnRequestAdapterTest extends TestCase
 
     public function testInvokeWithConfigAndWithLogger(): void
     {
-        /** @var SwooleRequest|MockObject $swooleRequest */
+        /** @var MockObject|SwooleRequest $swooleRequest */
         $swooleRequest = $this->getMockByCalls(SwooleRequest::class);
         $swooleRequest->header['x-blackfire-query'] = 'swoole';
 
-        /** @var SwooleResponse|MockObject $swooleResponse */
+        /** @var MockObject|SwooleResponse $swooleResponse */
         $swooleResponse = $this->getMockByCalls(SwooleResponse::class);
 
-        /** @var OnRequestInterface|MockObject $onRequest */
+        /** @var MockObject|OnRequestInterface $onRequest */
         $onRequest = $this->getMockByCalls(OnRequestInterface::class, [
             Call::create('__invoke')->with($swooleRequest, $swooleResponse),
         ]);
@@ -92,7 +92,7 @@ final class BlackfireOnRequestAdapterTest extends TestCase
         /** @var Configuration|MockObject $config */
         $config = $this->getMockByCalls(Configuration::class);
 
-        /** @var Probe|MockObject $probe */
+        /** @var MockObject|Probe $probe */
         $probe = $this->getMockByCalls(Probe::class);
 
         /** @var Client|MockObject $client */
@@ -110,14 +110,14 @@ final class BlackfireOnRequestAdapterTest extends TestCase
 
     public function testInvokeWithExceptionOnCreateProbe(): void
     {
-        /** @var SwooleRequest|MockObject $swooleRequest */
+        /** @var MockObject|SwooleRequest $swooleRequest */
         $swooleRequest = $this->getMockByCalls(SwooleRequest::class);
         $swooleRequest->header['x-blackfire-query'] = 'swoole';
 
-        /** @var SwooleResponse|MockObject $swooleResponse */
+        /** @var MockObject|SwooleResponse $swooleResponse */
         $swooleResponse = $this->getMockByCalls(SwooleResponse::class);
 
-        /** @var OnRequestInterface|MockObject $onRequest */
+        /** @var MockObject|OnRequestInterface $onRequest */
         $onRequest = $this->getMockByCalls(OnRequestInterface::class, [
             Call::create('__invoke')->with($swooleRequest, $swooleResponse),
         ]);
@@ -143,14 +143,14 @@ final class BlackfireOnRequestAdapterTest extends TestCase
 
     public function testInvokeWithExceptionOnProbeEnd(): void
     {
-        /** @var SwooleRequest|MockObject $swooleRequest */
+        /** @var MockObject|SwooleRequest $swooleRequest */
         $swooleRequest = $this->getMockByCalls(SwooleRequest::class);
         $swooleRequest->header['x-blackfire-query'] = 'swoole';
 
-        /** @var SwooleResponse|MockObject $swooleResponse */
+        /** @var MockObject|SwooleResponse $swooleResponse */
         $swooleResponse = $this->getMockByCalls(SwooleResponse::class);
 
-        /** @var OnRequestInterface|MockObject $onRequest */
+        /** @var MockObject|OnRequestInterface $onRequest */
         $onRequest = $this->getMockByCalls(OnRequestInterface::class, [
             Call::create('__invoke')->with($swooleRequest, $swooleResponse),
         ]);
@@ -158,7 +158,7 @@ final class BlackfireOnRequestAdapterTest extends TestCase
         /** @var Configuration|MockObject $config */
         $config = $this->getMockByCalls(Configuration::class);
 
-        /** @var Probe|MockObject $probe */
+        /** @var MockObject|Probe $probe */
         $probe = $this->getMockByCalls(Probe::class);
 
         $exception = new LogicException('Something went wrong');

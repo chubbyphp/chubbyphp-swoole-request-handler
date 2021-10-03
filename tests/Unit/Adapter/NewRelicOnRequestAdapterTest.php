@@ -9,7 +9,7 @@ namespace Chubbyphp\SwooleRequestHandler\Adapter
         /**
          * @var array<int, array>
          */
-        private static $calls = [];
+        private static array $calls = [];
 
         public static function add(string $appname, ?string $license = null): void
         {
@@ -40,7 +40,7 @@ namespace Chubbyphp\SwooleRequestHandler\Adapter
         /**
          * @var array<int, array>
          */
-        private static $calls = [];
+        private static array $calls = [];
 
         public static function add(bool $ignore): void
         {
@@ -94,13 +94,13 @@ namespace Chubbyphp\Tests\SwooleRequestHandler\Unit\Adapter
             TestNewRelicStartTransaction::reset();
             TestNewRelicEndTransaction::reset();
 
-            /** @var SwooleRequest|MockObject $swooleRequest */
+            /** @var MockObject|SwooleRequest $swooleRequest */
             $swooleRequest = $this->getMockByCalls(SwooleRequest::class);
 
-            /** @var SwooleResponse|MockObject $swooleResponse */
+            /** @var MockObject|SwooleResponse $swooleResponse */
             $swooleResponse = $this->getMockByCalls(SwooleResponse::class);
 
-            /** @var OnRequestInterface|MockObject $onRequest */
+            /** @var MockObject|OnRequestInterface $onRequest */
             $onRequest = $this->getMockByCalls(OnRequestInterface::class, [
                 Call::create('__invoke')->with($swooleRequest, $swooleResponse),
             ]);
