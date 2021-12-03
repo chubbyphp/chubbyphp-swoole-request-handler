@@ -18,7 +18,7 @@
     ],
     "require": {
         "php": "^7.4|^8.0",
-        "ext-swoole": "^4.5.8",
+        "ext-swoole": "^4.8.1",
         "dflydev/fig-cookies": "^2.0|^3.0",
         "psr/http-factory": "^1.0.1",
         "psr/http-message": "^1.0.1",
@@ -28,14 +28,14 @@
     "require-dev": {
         "blackfire/php-sdk": "^1.23",
         "chubbyphp/chubbyphp-dev-helper": "dev-master",
-        "chubbyphp/chubbyphp-mock": "^1.6",
-        "infection/infection": "^0.25.2",
-        "php-coveralls/php-coveralls": "^2.4.3",
+        "chubbyphp/chubbyphp-mock": "^1.6.1",
+        "infection/infection": "^0.25.3",
+        "php-coveralls/php-coveralls": "^2.5.1",
         "phploc/phploc": "^7.0.2",
         "phpstan/extension-installer": "^1.1",
-        "phpstan/phpstan": "^0.12.99",
+        "phpstan/phpstan": "^1.1.2",
         "phpunit/phpunit": "^9.5.10",
-        "swoole/ide-helper": "^4.5.8"
+        "swoole/ide-helper": "^4.8.1"
     },
     "autoload": {
         "psr-4": { "Chubbyphp\\SwooleRequestHandler\\": "src/" }
@@ -52,7 +52,7 @@
         }
     },
     "scripts": {
-        "fix:cs": "mkdir -p build && vendor/bin/php-cs-fixer fix --cache-file=build/phpcs.cache",
+        "fix:cs": "mkdir -p build && PHP_CS_FIXER_IGNORE_ENV=1 vendor/bin/php-cs-fixer fix --cache-file=build/phpcs.cache",
         "test": [
             "@test:lint",
             "@test:unit",
@@ -62,7 +62,7 @@
             "@test:loc",
             "@test:cs"
         ],
-        "test:cs": "mkdir -p build && vendor/bin/php-cs-fixer fix --dry-run --stop-on-violation --cache-file=build/phpcs.cache",
+        "test:cs": "mkdir -p build && PHP_CS_FIXER_IGNORE_ENV=1 vendor/bin/php-cs-fixer fix --dry-run --stop-on-violation --cache-file=build/phpcs.cache",
         "test:infection": "vendor/bin/infection --threads=$(nproc) --min-msi=100 --verbose --coverage=build/phpunit",
         "test:integration": "vendor/bin/phpunit --testsuite=Integration --cache-result-file=build/phpunit/result.cache",
         "test:lint": "mkdir -p build && find src tests -name '*.php' -print0 | xargs -0 -n1 -P$(nproc) php -l | tee build/phplint.log",
