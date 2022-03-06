@@ -10,20 +10,11 @@ use Swoole\Http\Response as SwooleResponse;
 
 final class OnRequest implements OnRequestInterface
 {
-    private PsrRequestFactoryInterface $psrRequestFactory;
-
-    private SwooleResponseEmitterInterface $swooleResponseEmitter;
-
-    private RequestHandlerInterface $requestHander;
-
     public function __construct(
-        PsrRequestFactoryInterface $psrRequestFactory,
-        SwooleResponseEmitterInterface $swooleResponseEmitter,
-        RequestHandlerInterface $requestHander
+        private PsrRequestFactoryInterface $psrRequestFactory,
+        private SwooleResponseEmitterInterface $swooleResponseEmitter,
+        private RequestHandlerInterface $requestHander
     ) {
-        $this->psrRequestFactory = $psrRequestFactory;
-        $this->swooleResponseEmitter = $swooleResponseEmitter;
-        $this->requestHander = $requestHander;
     }
 
     public function __invoke(SwooleRequest $swooleRequest, SwooleResponse $swooleResponse): void

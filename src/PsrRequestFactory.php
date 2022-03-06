@@ -13,20 +13,11 @@ use Swoole\Http\Request as SwooleRequest;
 
 final class PsrRequestFactory implements PsrRequestFactoryInterface
 {
-    private ServerRequestFactoryInterface $serverRequestFactory;
-
-    private StreamFactoryInterface $streamFactory;
-
-    private UploadedFileFactoryInterface $uploadedFileFactory;
-
     public function __construct(
-        ServerRequestFactoryInterface $serverRequestFactory,
-        StreamFactoryInterface $streamFactory,
-        UploadedFileFactoryInterface $uploadedFileFactory
+        private ServerRequestFactoryInterface $serverRequestFactory,
+        private StreamFactoryInterface $streamFactory,
+        private UploadedFileFactoryInterface $uploadedFileFactory
     ) {
-        $this->serverRequestFactory = $serverRequestFactory;
-        $this->streamFactory = $streamFactory;
-        $this->uploadedFileFactory = $uploadedFileFactory;
     }
 
     public function create(SwooleRequest $swooleRequest): ServerRequestInterface
@@ -62,11 +53,7 @@ final class PsrRequestFactory implements PsrRequestFactoryInterface
     {
         $uploadedFiles = [];
         foreach ($files as $key => $file) {
-            if (isset($file['tmp_name'])) {
-                $uploadedFiles[$key] = $this->createUploadedFile($file);
-            } else {
-                $uploadedFiles[$key] = $this->uploadedFiles($file);
-            }
+            $uploadedFiles[$key] = isset($file['tmp_name']) ? $this->createUploadedFile($file) : $this->uploadedFiles($file);
         }
 
         return $uploadedFiles;
@@ -79,7 +66,7 @@ final class PsrRequestFactory implements PsrRequestFactoryInterface
     {
         try {
             $stream = $this->streamFactory->createStreamFromFile($file['tmp_name']);
-        } catch (\RuntimeException $exception) {
+        } catch (\RuntimeException) {
             $stream = $this->streamFactory->createStream();
         }
 

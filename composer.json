@@ -17,25 +17,25 @@
         }
     ],
     "require": {
-        "php": "^7.4|^8.0",
-        "ext-swoole": "^4.8.1",
-        "dflydev/fig-cookies": "^2.0|^3.0",
+        "php": "^8.0",
+        "ext-swoole": "^4.8.5",
+        "dflydev/fig-cookies": "^3.0",
         "psr/http-factory": "^1.0.1",
         "psr/http-message": "^1.0.1",
         "psr/http-server-handler": "^1.0.1",
-        "psr/log": "^1.1.4"
+        "psr/log": "^1.1.4|^2.0|^3.0"
     },
     "require-dev": {
-        "blackfire/php-sdk": "^1.23",
+        "blackfire/php-sdk": "^1.29",
         "chubbyphp/chubbyphp-dev-helper": "dev-master",
         "chubbyphp/chubbyphp-mock": "^1.6.1",
-        "infection/infection": "^0.25.3",
-        "php-coveralls/php-coveralls": "^2.5.1",
+        "infection/infection": "^0.26.5",
+        "php-coveralls/php-coveralls": "^2.5.2",
         "phploc/phploc": "^7.0.2",
         "phpstan/extension-installer": "^1.1",
-        "phpstan/phpstan": "^1.1.2",
-        "phpunit/phpunit": "^9.5.10",
-        "swoole/ide-helper": "^4.8.1"
+        "phpstan/phpstan": "^1.4.8",
+        "phpunit/phpunit": "^9.5.17",
+        "swoole/ide-helper": "^4.8.5"
     },
     "autoload": {
         "psr-4": { "Chubbyphp\\SwooleRequestHandler\\": "src/" }
@@ -44,11 +44,15 @@
         "psr-4": { "Chubbyphp\\Tests\\SwooleRequestHandler\\": "tests/" }
     },
     "config": {
-        "sort-packages": true
+        "sort-packages": true,
+        "allow-plugins": {
+            "infection/extension-installer": true,
+            "phpstan/extension-installer": true
+        }
     },
     "extra": {
         "branch-alias": {
-            "dev-master": "1.1-dev"
+            "dev-master": "1.2-dev"
         }
     },
     "scripts": {
@@ -66,7 +70,7 @@
         "test:infection": "vendor/bin/infection --threads=$(nproc) --min-msi=100 --verbose --coverage=build/phpunit",
         "test:integration": "vendor/bin/phpunit --testsuite=Integration --cache-result-file=build/phpunit/result.cache",
         "test:lint": "mkdir -p build && find src tests -name '*.php' -print0 | xargs -0 -n1 -P$(nproc) php -l | tee build/phplint.log",
-        "test:loc": "mkdir -p build && vendor/bin/phploc src --verbose | tee build/phploc.log",
+        "test:loc": "mkdir -p build && vendor/bin/phploc src | tee build/phploc.log",
         "test:static-analysis": "mkdir -p build && bash -c 'vendor/bin/phpstan analyse src --no-progress --level=8 --error-format=junit | tee build/phpstan.junit.xml; if [ ${PIPESTATUS[0]} -ne \"0\" ]; then exit 1; fi'",
         "test:unit": "vendor/bin/phpunit --testsuite=Unit --coverage-text --coverage-clover=build/phpunit/clover.xml --coverage-html=build/phpunit/coverage-html --coverage-xml=build/phpunit/coverage-xml --log-junit=build/phpunit/junit.xml --cache-result-file=build/phpunit/result.cache"
     }

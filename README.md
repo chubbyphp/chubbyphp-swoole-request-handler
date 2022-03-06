@@ -26,20 +26,20 @@ A request handler adapter for swoole, using PSR-7, PSR-15 and PSR-17.
 
 ## Requirements
 
- * php: ^7.4|^8.0
- * [ext-swoole][2]: ^4.8.1
- * [dflydev/fig-cookies][3]: ^2.0|^3.0
+ * php: ^8.0
+ * [ext-swoole][2]: ^4.8.7
+ * [dflydev/fig-cookies][3]: ^3.0
  * [psr/http-factory][4]: ^1.0.1
  * [psr/http-message][5]: ^1.0.1
  * [psr/http-server-handler][6]: ^1.0.1
- * [psr/log][7]: ^1.1.4
+ * [psr/log][7]: ^1.1.4|^2.0|^3.0
 
 ## Installation
 
 Through [Composer](http://getcomposer.org) as [chubbyphp/chubbyphp-swoole-request-handler][1].
 
 ```sh
-composer require chubbyphp/chubbyphp-swoole-request-handler "^1.1"
+composer require chubbyphp/chubbyphp-swoole-request-handler "^1.2"
 ```
 
 ## Usage
@@ -131,7 +131,7 @@ $http->on('request', $onRequest);
 
 ## Copyright
 
-Dominik Zogg 2021
+Dominik Zogg 2022
 
 [1]: https://packagist.org/packages/chubbyphp/chubbyphp-swoole-request-handler
 [2]: https://www.swoole.co.uk

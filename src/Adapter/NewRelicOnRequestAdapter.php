@@ -10,14 +10,8 @@ use Swoole\Http\Response as SwooleResponse;
 
 final class NewRelicOnRequestAdapter implements OnRequestInterface
 {
-    private OnRequestInterface $onRequest;
-
-    private string $appname;
-
-    public function __construct(OnRequestInterface $onRequest, string $appname)
+    public function __construct(private OnRequestInterface $onRequest, private string $appname)
     {
-        $this->onRequest = $onRequest;
-        $this->appname = $appname;
     }
 
     public function __invoke(SwooleRequest $swooleRequest, SwooleResponse $swooleResponse): void

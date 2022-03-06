@@ -64,7 +64,7 @@ final class PsrRequestFactoryTest extends TestCase
                 'type' => 'application/pdf',
                 'tmp_name' => '/tmp/php9875842a',
                 'error' => 0,
-                'size' => 1048576,
+                'size' => 1_048_576,
             ],
             'certificates' => [
                 [
@@ -122,7 +122,7 @@ final class PsrRequestFactoryTest extends TestCase
         /** @var MockObject|UploadedFileFactoryInterface $uploadedFileFactory */
         $uploadedFileFactory = $this->getMockByCalls(UploadedFileFactoryInterface::class, [
             Call::create('createUploadedFile')
-                ->with($uploadedFileStream1, 1048576, 0, 'CV.pdf', 'application/pdf')
+                ->with($uploadedFileStream1, 1_048_576, 0, 'CV.pdf', 'application/pdf')
                 ->willReturn($uploadedFile1),
             Call::create('createUploadedFile')
                 ->with($uploadedFileStream2, 389120, 0, 'Advanced PHP 2017.pdf', 'application/pdf')

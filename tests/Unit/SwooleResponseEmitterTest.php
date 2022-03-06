@@ -57,7 +57,7 @@ final class SwooleResponseEmitterTest extends TestCase
                 ->with(
                     'id',
                     'a3fWa',
-                    1445412480,
+                    1_445_412_480,
                     '/some/path',
                     'some-domain.org',
                     true,
@@ -108,7 +108,7 @@ final class SwooleResponseEmitterTest extends TestCase
                 ->with(
                     'id',
                     'a3fWa',
-                    1445412480,
+                    1_445_412_480,
                     '/',
                     '',
                     true,
