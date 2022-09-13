@@ -51,8 +51,8 @@ final class SwooleResponseEmitterTest extends TestCase
 
         /** @var MockObject|SwooleResponse $swooleResponse */
         $swooleResponse = $this->getMockByCalls(SwooleResponse::class, [
-            Call::create('status')->with(200, 'OK'),
-            Call::create('header')->with('Content-Type', 'application/json', null),
+            Call::create('status')->with(200, 'OK')->willReturn(true),
+            Call::create('header')->with('Content-Type', 'application/json', true)->willReturn(true),
             Call::create('cookie')
                 ->with(
                     'id',
@@ -63,10 +63,11 @@ final class SwooleResponseEmitterTest extends TestCase
                     true,
                     true,
                     'Strict',
-                    null
-                ),
-            Call::create('write')->with('This is the body.'),
-            Call::create('end')->with(null),
+                    ''
+                )
+                ->willReturn(true),
+            Call::create('write')->with('This is the body.')->willReturn(true),
+            Call::create('end')->with(null)->willReturn(true),
         ]);
 
         $swooleResponseEmitter = new SwooleResponseEmitter();
@@ -102,8 +103,8 @@ final class SwooleResponseEmitterTest extends TestCase
 
         /** @var MockObject|SwooleResponse $swooleResponse */
         $swooleResponse = $this->getMockByCalls(SwooleResponse::class, [
-            Call::create('status')->with(200, 'OK'),
-            Call::create('header')->with('Content-Type', 'application/json', null),
+            Call::create('status')->with(200, 'OK')->willReturn(true),
+            Call::create('header')->with('Content-Type', 'application/json', true)->willReturn(true),
             Call::create('cookie')
                 ->with(
                     'id',
@@ -114,9 +115,9 @@ final class SwooleResponseEmitterTest extends TestCase
                     true,
                     true,
                     '',
-                    null
-                ),
-            Call::create('end')->with(null),
+                    ''
+                )->willReturn(true),
+            Call::create('end')->with(null)->willReturn(true),
         ]);
 
         $swooleResponseEmitter = new SwooleResponseEmitter();
