@@ -17,25 +17,24 @@
         }
     ],
     "require": {
-        "php": "^8.0",
-        "ext-swoole": "^5.0.0",
-        "dflydev/fig-cookies": "^3.0",
-        "psr/http-factory": "^1.0.1",
-        "psr/http-message": "^1.0.1",
-        "psr/http-server-handler": "^1.0.1",
-        "psr/log": "^1.1.4|^2.0|^3.0"
+        "php": "^8.1",
+        "ext-swoole": "^5.1.1",
+        "dflydev/fig-cookies": "^3.1",
+        "psr/http-factory": "^1.0.2",
+        "psr/http-message": "^1.1|^2.0",
+        "psr/http-server-handler": "^1.0.2",
+        "psr/log": "^2.0|^3.0"
     },
     "require-dev": {
-        "blackfire/php-sdk": "^1.31",
+        "blackfire/php-sdk": "^2.3.5",
         "chubbyphp/chubbyphp-dev-helper": "dev-master",
-        "chubbyphp/chubbyphp-mock": "^1.6.1",
-        "infection/infection": "^0.26.14",
-        "php-coveralls/php-coveralls": "^2.5.3",
-        "phploc/phploc": "^7.0.2",
-        "phpstan/extension-installer": "^1.1",
-        "phpstan/phpstan": "^1.8.5",
-        "phpunit/phpunit": "^9.5.24",
-        "swoole/ide-helper": "^5.0.0"
+        "chubbyphp/chubbyphp-mock": "^1.7",
+        "infection/infection": "^0.27.8",
+        "php-coveralls/php-coveralls": "^2.7",
+        "phpstan/extension-installer": "^1.3.1",
+        "phpstan/phpstan": "^1.10.45",
+        "phpunit/phpunit": "^10.4.2",
+        "swoole/ide-helper": "^5.1"
     },
     "autoload": {
         "psr-4": {
@@ -56,7 +55,7 @@
     },
     "extra": {
         "branch-alias": {
-            "dev-master": "1.3-dev"
+            "dev-master": "1.4-dev"
         }
     },
     "scripts": {
@@ -67,14 +66,12 @@
             "@test:integration",
             "@test:infection",
             "@test:static-analysis",
-            "@test:loc",
             "@test:cs"
         ],
         "test:cs": "mkdir -p build && PHP_CS_FIXER_IGNORE_ENV=1 vendor/bin/php-cs-fixer fix --dry-run --stop-on-violation --cache-file=build/phpcs.cache",
         "test:infection": "vendor/bin/infection --threads=$(nproc) --min-msi=100 --verbose --coverage=build/phpunit",
         "test:integration": "vendor/bin/phpunit --testsuite=Integration --cache-result-file=build/phpunit/result.cache",
         "test:lint": "mkdir -p build && find src tests -name '*.php' -print0 | xargs -0 -n1 -P$(nproc) php -l | tee build/phplint.log",
-        "test:loc": "mkdir -p build && vendor/bin/phploc src | tee build/phploc.log",
         "test:static-analysis": "mkdir -p build && bash -c 'vendor/bin/phpstan analyse src --no-progress --level=8 --error-format=junit | tee build/phpstan.junit.xml; if [ ${PIPESTATUS[0]} -ne \"0\" ]; then exit 1; fi'",
         "test:unit": "vendor/bin/phpunit --testsuite=Unit --coverage-text --coverage-clover=build/phpunit/clover.xml --coverage-html=build/phpunit/coverage-html --coverage-xml=build/phpunit/coverage-xml --log-junit=build/phpunit/junit.xml --cache-result-file=build/phpunit/result.cache"
     }

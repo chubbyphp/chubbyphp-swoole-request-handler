@@ -3,7 +3,7 @@
 [![CI](https://github.com/chubbyphp/chubbyphp-swoole-request-handler/workflows/CI/badge.svg?branch=master)](https://github.com/chubbyphp/chubbyphp-swoole-request-handler/actions?query=workflow%3ACI)
 [![Build Status](https://api.travis-ci.org/chubbyphp/chubbyphp-swoole-request-handler.png?branch=master)](https://travis-ci.org/chubbyphp/chubbyphp-swoole-request-handler)
 [![Coverage Status](https://coveralls.io/repos/github/chubbyphp/chubbyphp-swoole-request-handler/badge.svg?branch=master)](https://coveralls.io/github/chubbyphp/chubbyphp-swoole-request-handler?branch=master)
-[![Infection MSI](https://badge.stryker-mutator.io/github.com/chubbyphp/chubbyphp-swoole-request-handler/master)](https://dashboard.stryker-mutator.io/reports/github.com/chubbyphp/chubbyphp-swoole-request-handler/master)
+[![Mutation testing badge](https://img.shields.io/endpoint?style=flat&url=https%3A%2F%2Fbadge-api.stryker-mutator.io%2Fgithub.com%2Fchubbyphp%2Fchubbyphp-swoole-request-handler%2Fmaster)](https://dashboard.stryker-mutator.io/reports/github.com/chubbyphp/chubbyphp-swoole-request-handler/master)[![Latest Stable Version](https://poser.pugx.org/chubbyphp/chubbyphp-swoole-request-handler/v/stable.png)](https://packagist.org/packages/chubbyphp/chubbyphp-swoole-request-handler)
 [![Latest Stable Version](https://poser.pugx.org/chubbyphp/chubbyphp-swoole-request-handler/v/stable.png)](https://packagist.org/packages/chubbyphp/chubbyphp-swoole-request-handler)
 [![Total Downloads](https://poser.pugx.org/chubbyphp/chubbyphp-swoole-request-handler/downloads.png)](https://packagist.org/packages/chubbyphp/chubbyphp-swoole-request-handler)
 [![Monthly Downloads](https://poser.pugx.org/chubbyphp/chubbyphp-swoole-request-handler/d/monthly)](https://packagist.org/packages/chubbyphp/chubbyphp-swoole-request-handler)
@@ -26,13 +26,13 @@ A request handler adapter for swoole, using PSR-7, PSR-15 and PSR-17.
 
 ## Requirements
 
- * php: ^8.0
- * [ext-swoole][2]: ^5.0.0
- * [dflydev/fig-cookies][3]: ^3.0
- * [psr/http-factory][4]: ^1.0.1
- * [psr/http-message][5]: ^1.0.1
- * [psr/http-server-handler][6]: ^1.0.1
- * [psr/log][7]: ^1.1.4|^2.0|^3.0
+ * php: ^8.1
+ * [ext-swoole][2]: ^5.1.1
+ * [dflydev/fig-cookies][3]: ^3.1
+ * [psr/http-factory][4]: ^1.0.2
+ * [psr/http-message][5]: ^1.1|^2.0
+ * [psr/http-server-handler][6]: ^1.0.2
+ * [psr/log][7]: ^2.0|^3.0
 
 ## Installation
 

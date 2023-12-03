@@ -14,8 +14,7 @@ final class OnRequest implements OnRequestInterface
         private PsrRequestFactoryInterface $psrRequestFactory,
         private SwooleResponseEmitterInterface $swooleResponseEmitter,
         private RequestHandlerInterface $requestHander
-    ) {
-    }
+    ) {}
 
     public function __invoke(SwooleRequest $swooleRequest, SwooleResponse $swooleResponse): void
     {

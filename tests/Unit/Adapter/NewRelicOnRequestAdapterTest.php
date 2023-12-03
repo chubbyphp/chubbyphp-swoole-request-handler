@@ -85,7 +85,7 @@ namespace Chubbyphp\Tests\SwooleRequestHandler\Unit\Adapter
      *
      * @internal
      */
-    final class NewRelicRouteMiddlewareTest extends TestCase
+    final class NewRelicOnRequestAdapterTest extends TestCase
     {
         use MockByCallsTrait;
 
