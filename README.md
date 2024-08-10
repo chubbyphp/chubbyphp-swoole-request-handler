@@ -1,10 +1,10 @@
 # chubbyphp-swoole-request-handler
 
-[![CI](https://github.com/chubbyphp/chubbyphp-swoole-request-handler/workflows/CI/badge.svg?branch=master)](https://github.com/chubbyphp/chubbyphp-swoole-request-handler/actions?query=workflow%3ACI)
+[![CI](https://github.com/chubbyphp/chubbyphp-swoole-request-handler/actions/workflows/ci.yml/badge.svg)](https://github.com/chubbyphp/chubbyphp-swoole-request-handler/actions/workflows/ci.yml)
 [![Coverage Status](https://coveralls.io/repos/github/chubbyphp/chubbyphp-swoole-request-handler/badge.svg?branch=master)](https://coveralls.io/github/chubbyphp/chubbyphp-swoole-request-handler?branch=master)
 [![Mutation testing badge](https://img.shields.io/endpoint?style=flat&url=https%3A%2F%2Fbadge-api.stryker-mutator.io%2Fgithub.com%2Fchubbyphp%2Fchubbyphp-swoole-request-handler%2Fmaster)](https://dashboard.stryker-mutator.io/reports/github.com/chubbyphp/chubbyphp-swoole-request-handler/master)
-[![Latest Stable Version](https://poser.pugx.org/chubbyphp/chubbyphp-swoole-request-handler/v/stable.png)](https://packagist.org/packages/chubbyphp/chubbyphp-swoole-request-handler)
-[![Total Downloads](https://poser.pugx.org/chubbyphp/chubbyphp-swoole-request-handler/downloads.png)](https://packagist.org/packages/chubbyphp/chubbyphp-swoole-request-handler)
+[![Latest Stable Version](https://poser.pugx.org/chubbyphp/chubbyphp-swoole-request-handler/v)](https://packagist.org/packages/chubbyphp/chubbyphp-swoole-request-handler)
+[![Total Downloads](https://poser.pugx.org/chubbyphp/chubbyphp-swoole-request-handler/downloads)](https://packagist.org/packages/chubbyphp/chubbyphp-swoole-request-handler)
 [![Monthly Downloads](https://poser.pugx.org/chubbyphp/chubbyphp-swoole-request-handler/d/monthly)](https://packagist.org/packages/chubbyphp/chubbyphp-swoole-request-handler)
 
 [![bugs](https://sonarcloud.io/api/project_badges/measure?project=chubbyphp_chubbyphp-swoole-request-handler&metric=bugs)](https://sonarcloud.io/dashboard?id=chubbyphp_chubbyphp-swoole-request-handler)
