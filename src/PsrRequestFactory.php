@@ -23,9 +23,18 @@ final class PsrRequestFactory implements PsrRequestFactoryInterface
     {
         $server = array_change_key_case($swooleRequest->server ?? [], CASE_UPPER);
 
+        list($scheme, $protocolVersion) = explode('/', $server['SERVER_PROTOCOL']);
+        $scheme = strtolower($scheme);
+        $host = $server["SERVER_HOST"] ?? '0.0.0.0';
+        $port = $server["SERVER_PORT"] ?? '';
+        $port = in_array($port, [80, 443]) ? '' : ":{$port}";
+        $requestUri = $server['REQUEST_URI'] ?? '';
+        $queryString = $server['QUERY_STRING'] ?? '';
+        $uri = $scheme . '://' . $host . $port . $requestUri . ($queryString ? "?{$queryString}" : '');
+
         $request = $this->serverRequestFactory->createServerRequest(
             $server['REQUEST_METHOD'] ?? 'GET',
-            $server['REQUEST_URI'] ?? '',
+            $uri,
             $server
         );
 
