@@ -5,7 +5,8 @@ declare(strict_types=1);
 namespace Chubbyphp\SwooleRequestHandler\Adapter;
 
 use Blackfire\Client;
-use Blackfire\Exception\ExceptionInterface;
+use Blackfire\Exception\LogicException;
+use Blackfire\Exception\RuntimeException;
 use Blackfire\Probe;
 use Blackfire\Profile\Configuration;
 use Chubbyphp\SwooleRequestHandler\OnRequestInterface;
@@ -53,8 +54,8 @@ final class BlackfireOnRequestAdapter implements OnRequestInterface
     {
         try {
             return $this->client->createProbe($this->config);
-        } catch (ExceptionInterface $exception) {
-            $this->logger->error(sprintf('Blackfire exception: %s', $exception->getMessage()));
+        } catch (LogicException|RuntimeException $exception) {
+            $this->logger->error(\sprintf('Blackfire exception: %s', $exception->getMessage()));
         }
 
         return null;
@@ -64,8 +65,8 @@ final class BlackfireOnRequestAdapter implements OnRequestInterface
     {
         try {
             $this->client->endProbe($probe);
-        } catch (ExceptionInterface $exception) {
-            $this->logger->error(sprintf('Blackfire exception: %s', $exception->getMessage()));
+        } catch (LogicException|RuntimeException $exception) {
+            $this->logger->error(\sprintf('Blackfire exception: %s', $exception->getMessage()));
         }
     }
 }

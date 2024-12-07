@@ -15,6 +15,7 @@ final class SwooleResponseEmitter implements SwooleResponseEmitterInterface
     {
         $swooleResponse->status($response->getStatusCode(), $response->getReasonPhrase());
 
+        /** @var string $name */
         foreach ($response->withoutHeader(SetCookies::SET_COOKIE_HEADER)->getHeaders() as $name => $values) {
             $swooleResponse->header($name, implode(', ', $values));
         }
