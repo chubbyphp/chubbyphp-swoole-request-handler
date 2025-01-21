@@ -130,7 +130,7 @@ $http->on('request', $onRequest);
 
 ## Copyright
 
-2024 Dominik Zogg
+2025 Dominik Zogg
 
 [1]: https://packagist.org/packages/chubbyphp/chubbyphp-swoole-request-handler
 [2]: https://www.swoole.co.uk
