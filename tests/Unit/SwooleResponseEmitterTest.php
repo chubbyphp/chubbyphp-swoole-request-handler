@@ -4,10 +4,11 @@ declare(strict_types=1);
 
 namespace Chubbyphp\Tests\SwooleRequestHandler\Unit;
 
-use Chubbyphp\Mock\Call;
-use Chubbyphp\Mock\MockByCallsTrait;
+use Chubbyphp\Mock\MockMethod\WithoutReturn;
+use Chubbyphp\Mock\MockMethod\WithReturn;
+use Chubbyphp\Mock\MockObjectBuilder;
 use Chubbyphp\SwooleRequestHandler\SwooleResponseEmitter;
-use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DoesNotPerformAssertions;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\StreamInterface;
@@ -20,79 +21,76 @@ use Swoole\Http\Response as SwooleResponse;
  */
 final class SwooleResponseEmitterTest extends TestCase
 {
-    use MockByCallsTrait;
-
+    #[DoesNotPerformAssertions]
     public function testInvoke(): void
     {
-        /** @var MockObject|ResponseInterface $responseWithoutCookies */
-        $responseWithoutCookies = $this->getMockByCalls(ResponseInterface::class, [
-            Call::create('getHeaders')->with()->willReturn(['Content-Type' => ['application/json']]),
+        /** @var ResponseInterface $responseWithoutCookies */
+        $builder = new MockObjectBuilder();
+
+        $responseWithoutCookies = $builder->create(ResponseInterface::class, [
+            new WithReturn('getHeaders', [], ['Content-Type' => ['application/json']]),
         ]);
 
-        /** @var MockObject|StreamInterface $responseBody */
-        $responseBody = $this->getMockByCalls(StreamInterface::class, [
-            Call::create('isSeekable')->with()->willReturn(true),
-            Call::create('rewind')->with(),
-            Call::create('eof')->willReturn(false),
-            Call::create('read')->with(256)->willReturn('This is the body.'),
-            Call::create('eof')->willReturn(true),
+        /** @var StreamInterface $responseBody */
+        $responseBody = $builder->create(StreamInterface::class, [
+            new WithReturn('isSeekable', [], true),
+            new WithoutReturn('rewind', []),
+            new WithReturn('eof', [], false),
+            new WithReturn('read', [256], 'This is the body.'),
+            new WithReturn('eof', [], true),
         ]);
 
-        /** @var MockObject|ResponseInterface $response */
-        $response = $this->getMockByCalls(ResponseInterface::class, [
-            Call::create('getStatusCode')->with()->willReturn(200),
-            Call::create('getReasonPhrase')->with()->willReturn('OK'),
-            Call::create('withoutHeader')->with('Set-Cookie')->willReturn($responseWithoutCookies),
-            Call::create('getHeader')
-                ->with('Set-Cookie')
-                ->willReturn(['id=a3fWa; Expires=Wed, 21 Oct 2015 07:28:00 GMT; Domain=some-domain.org; Path=/some/path; Secure; HttpOnly; SameSite=strict']),
-            Call::create('getBody')->with()->willReturn($responseBody),
+        /** @var ResponseInterface $response */
+        $response = $builder->create(ResponseInterface::class, [
+            new WithReturn('getStatusCode', [], 200),
+            new WithReturn('getReasonPhrase', [], 'OK'),
+            new WithReturn('withoutHeader', ['Set-Cookie'], $responseWithoutCookies),
+            new WithReturn('getHeader', ['Set-Cookie'], [
+                'id=a3fWa; Expires=Wed, 21 Oct 2015 07:28:00 GMT; Domain=some-domain.org; Path=/some/path; Secure; HttpOnly; SameSite=strict',
+            ]),
+            new WithReturn('getBody', [], $responseBody),
         ]);
 
         $installedVersion = phpversion('swoole');
 
-        if (version_compare($installedVersion, '6.0.0-RC1', '>=')) {
-            /** @var MockObject|SwooleResponse $swooleResponse */
-            $swooleResponse = $this->getMockByCalls(SwooleResponse::class, [
-                Call::create('status')->with(200, 'OK')->willReturn(true),
-                Call::create('header')->with('Content-Type', 'application/json', true)->willReturn(true),
-                Call::create('cookie')
-                    ->with(
-                        'id',
-                        'a3fWa',
-                        1_445_412_480,
-                        '/some/path',
-                        'some-domain.org',
-                        true,
-                        true,
-                        'Strict',
-                        '',
-                        false
-                    )
-                    ->willReturn(true),
-                Call::create('write')->with('This is the body.')->willReturn(true),
-                Call::create('end')->with(null)->willReturn(true),
+        if (version_compare($installedVersion, '6.0.0', '>=')) {
+            /** @var SwooleResponse $swooleResponse */
+            $swooleResponse = $builder->create(SwooleResponse::class, [
+                new WithReturn('status', [200, 'OK'], true),
+                new WithReturn('header', ['Content-Type', 'application/json', true], true),
+                new WithReturn('cookie', [
+                    'id',
+                    'a3fWa',
+                    1_445_412_480,
+                    '/some/path',
+                    'some-domain.org',
+                    true,
+                    true,
+                    'Strict',
+                    '',
+                    false,
+                ], true),
+                new WithReturn('write', ['This is the body.'], true),
+                new WithReturn('end', [null], true),
             ]);
         } else {
-            /** @var MockObject|SwooleResponse $swooleResponse */
-            $swooleResponse = $this->getMockByCalls(SwooleResponse::class, [
-                Call::create('status')->with(200, 'OK')->willReturn(true),
-                Call::create('header')->with('Content-Type', 'application/json', true)->willReturn(true),
-                Call::create('cookie')
-                    ->with(
-                        'id',
-                        'a3fWa',
-                        1_445_412_480,
-                        '/some/path',
-                        'some-domain.org',
-                        true,
-                        true,
-                        'Strict',
-                        '',
-                    )
-                    ->willReturn(true),
-                Call::create('write')->with('This is the body.')->willReturn(true),
-                Call::create('end')->with(null)->willReturn(true),
+            /** @var SwooleResponse $swooleResponse */
+            $swooleResponse = $builder->create(SwooleResponse::class, [
+                new WithReturn('status', [200, 'OK'], true),
+                new WithReturn('header', ['Content-Type', 'application/json', true], true),
+                new WithReturn('cookie', [
+                    'id',
+                    'a3fWa',
+                    1_445_412_480,
+                    '/some/path',
+                    'some-domain.org',
+                    true,
+                    true,
+                    'Strict',
+                    '',
+                ], true),
+                new WithReturn('write', ['This is the body.'], true),
+                new WithReturn('end', [null], true),
             ]);
         }
 
@@ -100,73 +98,74 @@ final class SwooleResponseEmitterTest extends TestCase
         $swooleResponseEmitter->emit($response, $swooleResponse);
     }
 
+    #[DoesNotPerformAssertions]
     public function testInvokeWithEmptyBody(): void
     {
-        /** @var MockObject|ResponseInterface $responseWithoutCookies */
-        $responseWithoutCookies = $this->getMockByCalls(ResponseInterface::class, [
-            Call::create('getHeaders')->with()->willReturn(['Content-Type' => ['application/json']]),
+        /** @var ResponseInterface $responseWithoutCookies */
+        $builder = new MockObjectBuilder();
+
+        $responseWithoutCookies = $builder->create(ResponseInterface::class, [
+            new WithReturn('getHeaders', [], ['Content-Type' => ['application/json']]),
         ]);
 
-        /** @var MockObject|StreamInterface $responseBody */
-        $responseBody = $this->getMockByCalls(StreamInterface::class, [
-            Call::create('isSeekable')->with()->willReturn(true),
-            Call::create('rewind')->with(),
-            Call::create('eof')->willReturn(false),
-            Call::create('read')->with(256)->willReturn(''),
-            Call::create('eof')->willReturn(true),
+        /** @var StreamInterface $responseBody */
+        $responseBody = $builder->create(StreamInterface::class, [
+            new WithReturn('isSeekable', [], true),
+            new WithoutReturn('rewind', []),
+            new WithReturn('eof', [], false),
+            new WithReturn('read', [256], ''),
+            new WithReturn('eof', [], true),
         ]);
 
-        /** @var MockObject|ResponseInterface $response */
-        $response = $this->getMockByCalls(ResponseInterface::class, [
-            Call::create('getStatusCode')->with()->willReturn(200),
-            Call::create('getReasonPhrase')->with()->willReturn('OK'),
-            Call::create('withoutHeader')->with('Set-Cookie')->willReturn($responseWithoutCookies),
-            Call::create('getHeader')
-                ->with('Set-Cookie')
-                ->willReturn(['id=a3fWa; Expires=Wed, 21 Oct 2015 07:28:00 GMT; Secure; HttpOnly']),
-            Call::create('getBody')->with()->willReturn($responseBody),
+        /** @var ResponseInterface $response */
+        $response = $builder->create(ResponseInterface::class, [
+            new WithReturn('getStatusCode', [], 200),
+            new WithReturn('getReasonPhrase', [], 'OK'),
+            new WithReturn('withoutHeader', ['Set-Cookie'], $responseWithoutCookies),
+            new WithReturn('getHeader', ['Set-Cookie'], [
+                'id=a3fWa; Expires=Wed, 21 Oct 2015 07:28:00 GMT; Secure; HttpOnly',
+            ]),
+            new WithReturn('getBody', [], $responseBody),
         ]);
 
         $installedVersion = phpversion('swoole');
 
-        if (version_compare($installedVersion, '6.0.0-RC1', '>=')) {
-            /** @var MockObject|SwooleResponse $swooleResponse */
-            $swooleResponse = $this->getMockByCalls(SwooleResponse::class, [
-                Call::create('status')->with(200, 'OK')->willReturn(true),
-                Call::create('header')->with('Content-Type', 'application/json', true)->willReturn(true),
-                Call::create('cookie')
-                    ->with(
-                        'id',
-                        'a3fWa',
-                        1_445_412_480,
-                        '/',
-                        '',
-                        true,
-                        true,
-                        '',
-                        '',
-                        false,
-                    )->willReturn(true),
-                Call::create('end')->with(null)->willReturn(true),
+        if (version_compare($installedVersion, '6.0.0', '>=')) {
+            /** @var SwooleResponse $swooleResponse */
+            $swooleResponse = $builder->create(SwooleResponse::class, [
+                new WithReturn('status', [200, 'OK'], true),
+                new WithReturn('header', ['Content-Type', 'application/json', true], true),
+                new WithReturn('cookie', [
+                    'id',
+                    'a3fWa',
+                    1_445_412_480,
+                    '/',
+                    '',
+                    true,
+                    true,
+                    '',
+                    '',
+                    false,
+                ], true),
+                new WithReturn('end', [null], true),
             ]);
         } else {
-            /** @var MockObject|SwooleResponse $swooleResponse */
-            $swooleResponse = $this->getMockByCalls(SwooleResponse::class, [
-                Call::create('status')->with(200, 'OK')->willReturn(true),
-                Call::create('header')->with('Content-Type', 'application/json', true)->willReturn(true),
-                Call::create('cookie')
-                    ->with(
-                        'id',
-                        'a3fWa',
-                        1_445_412_480,
-                        '/',
-                        '',
-                        true,
-                        true,
-                        '',
-                        '',
-                    )->willReturn(true),
-                Call::create('end')->with(null)->willReturn(true),
+            /** @var SwooleResponse $swooleResponse */
+            $swooleResponse = $builder->create(SwooleResponse::class, [
+                new WithReturn('status', [200, 'OK'], true),
+                new WithReturn('header', ['Content-Type', 'application/json', true], true),
+                new WithReturn('cookie', [
+                    'id',
+                    'a3fWa',
+                    1_445_412_480,
+                    '/',
+                    '',
+                    true,
+                    true,
+                    '',
+                    '',
+                ], true),
+                new WithReturn('end', [null], true),
             ]);
         }
 

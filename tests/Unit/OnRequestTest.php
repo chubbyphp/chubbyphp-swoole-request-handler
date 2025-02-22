@@ -4,12 +4,13 @@ declare(strict_types=1);
 
 namespace Chubbyphp\Tests\SwooleRequestHandler\Unit;
 
-use Chubbyphp\Mock\Call;
-use Chubbyphp\Mock\MockByCallsTrait;
+use Chubbyphp\Mock\MockMethod\WithoutReturn;
+use Chubbyphp\Mock\MockMethod\WithReturn;
+use Chubbyphp\Mock\MockObjectBuilder;
 use Chubbyphp\SwooleRequestHandler\OnRequest;
 use Chubbyphp\SwooleRequestHandler\PsrRequestFactoryInterface;
 use Chubbyphp\SwooleRequestHandler\SwooleResponseEmitterInterface;
-use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DoesNotPerformAssertions;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -24,35 +25,36 @@ use Swoole\Http\Response as SwooleResponse;
  */
 final class OnRequestTest extends TestCase
 {
-    use MockByCallsTrait;
-
+    #[DoesNotPerformAssertions]
     public function testInvoke(): void
     {
-        /** @var MockObject|SwooleRequest $swooleRequest */
-        $swooleRequest = $this->getMockByCalls(SwooleRequest::class);
+        $builder = new MockObjectBuilder();
 
-        /** @var MockObject|SwooleResponse $swooleResponse */
-        $swooleResponse = $this->getMockByCalls(SwooleResponse::class);
+        /** @var SwooleRequest $swooleRequest */
+        $swooleRequest = $builder->create(SwooleRequest::class, []);
 
-        /** @var MockObject|ServerRequestInterface $request */
-        $request = $this->getMockByCalls(ServerRequestInterface::class);
+        /** @var SwooleResponse $swooleResponse */
+        $swooleResponse = $builder->create(SwooleResponse::class, []);
 
-        /** @var MockObject|ResponseInterface $response */
-        $response = $this->getMockByCalls(ResponseInterface::class);
+        /** @var ServerRequestInterface $request */
+        $request = $builder->create(ServerRequestInterface::class, []);
 
-        /** @var MockObject|PsrRequestFactoryInterface $psrRequestFactory */
-        $psrRequestFactory = $this->getMockByCalls(PsrRequestFactoryInterface::class, [
-            Call::create('create')->with($swooleRequest)->willReturn($request),
+        /** @var ResponseInterface $response */
+        $response = $builder->create(ResponseInterface::class, []);
+
+        /** @var PsrRequestFactoryInterface $psrRequestFactory */
+        $psrRequestFactory = $builder->create(PsrRequestFactoryInterface::class, [
+            new WithReturn('create', [$swooleRequest], $request),
         ]);
 
-        /** @var MockObject|SwooleResponseEmitterInterface $swooleResponseEmitter */
-        $swooleResponseEmitter = $this->getMockByCalls(SwooleResponseEmitterInterface::class, [
-            Call::create('emit')->with($response, $swooleResponse),
+        /** @var SwooleResponseEmitterInterface $swooleResponseEmitter */
+        $swooleResponseEmitter = $builder->create(SwooleResponseEmitterInterface::class, [
+            new WithoutReturn('emit', [$response, $swooleResponse]),
         ]);
 
-        /** @var MockObject|RequestHandlerInterface $swooleRequestHandler */
-        $swooleRequestHandler = $this->getMockByCalls(RequestHandlerInterface::class, [
-            Call::create('handle')->with($request)->willReturn($response),
+        /** @var RequestHandlerInterface $swooleRequestHandler */
+        $swooleRequestHandler = $builder->create(RequestHandlerInterface::class, [
+            new WithReturn('handle', [$request], $response),
         ]);
 
         $onRequest = new OnRequest($psrRequestFactory, $swooleResponseEmitter, $swooleRequestHandler);
