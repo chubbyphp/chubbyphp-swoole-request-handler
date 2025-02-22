@@ -69,14 +69,13 @@ namespace Chubbyphp\SwooleRequestHandler\Adapter
 
 namespace Chubbyphp\Tests\SwooleRequestHandler\Unit\Adapter
 {
-    use Chubbyphp\Mock\Call;
-    use Chubbyphp\Mock\MockByCallsTrait;
+    use Chubbyphp\Mock\MockMethod\WithoutReturn;
+    use Chubbyphp\Mock\MockObjectBuilder;
     use Chubbyphp\SwooleRequestHandler\Adapter\NewRelicOnRequestAdapter;
     use Chubbyphp\SwooleRequestHandler\Adapter\TestNewRelicEndTransaction;
     use Chubbyphp\SwooleRequestHandler\Adapter\TestNewRelicStartTransaction;
     use Chubbyphp\SwooleRequestHandler\OnRequestInterface;
     use PHPUnit\Framework\TestCase;
-    use PHPUnit\SwooleRequestHandler\MockObject\MockObject;
     use Swoole\Http\Request as SwooleRequest;
     use Swoole\Http\Response as SwooleResponse;
 
@@ -87,22 +86,22 @@ namespace Chubbyphp\Tests\SwooleRequestHandler\Unit\Adapter
      */
     final class NewRelicOnRequestAdapterTest extends TestCase
     {
-        use MockByCallsTrait;
-
         public function testInvoke(): void
         {
             TestNewRelicStartTransaction::reset();
             TestNewRelicEndTransaction::reset();
 
-            /** @var MockObject|SwooleRequest $swooleRequest */
-            $swooleRequest = $this->getMockByCalls(SwooleRequest::class);
+            $builder = new MockObjectBuilder();
 
-            /** @var MockObject|SwooleResponse $swooleResponse */
-            $swooleResponse = $this->getMockByCalls(SwooleResponse::class);
+            /** @var SwooleRequest $swooleRequest */
+            $swooleRequest = $builder->create(SwooleRequest::class, []);
 
-            /** @var MockObject|OnRequestInterface $onRequest */
-            $onRequest = $this->getMockByCalls(OnRequestInterface::class, [
-                Call::create('__invoke')->with($swooleRequest, $swooleResponse),
+            /** @var SwooleResponse $swooleResponse */
+            $swooleResponse = $builder->create(SwooleResponse::class, []);
+
+            /** @var OnRequestInterface $onRequest */
+            $onRequest = $builder->create(OnRequestInterface::class, [
+                new WithoutReturn('__invoke', [$swooleRequest, $swooleResponse]),
             ]);
 
             $adapter = new NewRelicOnRequestAdapter($onRequest, 'myapp');

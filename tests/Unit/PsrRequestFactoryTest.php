@@ -4,11 +4,13 @@ declare(strict_types=1);
 
 namespace Chubbyphp\Tests\SwooleRequestHandler\Unit;
 
-use Chubbyphp\Mock\Argument\ArgumentCallback;
-use Chubbyphp\Mock\Call;
-use Chubbyphp\Mock\MockByCallsTrait;
+use Chubbyphp\Mock\MockMethod\WithCallback;
+use Chubbyphp\Mock\MockMethod\WithException;
+use Chubbyphp\Mock\MockMethod\WithReturn;
+use Chubbyphp\Mock\MockMethod\WithReturnSelf;
+use Chubbyphp\Mock\MockObjectBuilder;
 use Chubbyphp\SwooleRequestHandler\PsrRequestFactory;
-use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ServerRequestFactoryInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -25,15 +27,14 @@ use Swoole\Http\Request as SwooleRequest;
  */
 final class PsrRequestFactoryTest extends TestCase
 {
-    use MockByCallsTrait;
-
     public function testInvoke(): void
     {
         $bodyString = 'This is the body.';
+        $builder = new MockObjectBuilder();
 
-        /** @var MockObject|SwooleRequest $swooleRequest */
-        $swooleRequest = $this->getMockByCalls(SwooleRequest::class, [
-            Call::create('rawContent')->with()->willReturn('This is the body.'),
+        /** @var SwooleRequest $swooleRequest */
+        $swooleRequest = $builder->create(SwooleRequest::class, [
+            new WithReturn('rawContent', [], $bodyString),
         ]);
 
         $swooleRequest->server = [
@@ -86,84 +87,72 @@ final class PsrRequestFactoryTest extends TestCase
             ],
         ];
 
-        /** @var MockObject|StreamInterface $requestBody */
-        $requestBody = $this->getMockByCalls(StreamInterface::class, [
-            Call::create('write')->with($bodyString)->willReturn(\strlen($bodyString)),
+        /** @var StreamInterface $requestBody */
+        $requestBody = $builder->create(StreamInterface::class, [
+            new WithReturn('write', [$bodyString], \strlen($bodyString)),
         ]);
 
-        /** @var MockObject|StreamInterface $uploadedFileStream1 */
-        $uploadedFileStream1 = $this->getMockByCalls(StreamInterface::class);
+        /** @var StreamInterface $uploadedFileStream1 */
+        $uploadedFileStream1 = $builder->create(StreamInterface::class, []);
 
-        /** @var MockObject|StreamInterface $uploadedFileStream2 */
-        $uploadedFileStream2 = $this->getMockByCalls(StreamInterface::class);
+        /** @var StreamInterface $uploadedFileStream2 */
+        $uploadedFileStream2 = $builder->create(StreamInterface::class, []);
 
-        /** @var MockObject|StreamInterface $uploadedFileStream3 */
-        $uploadedFileStream3 = $this->getMockByCalls(StreamInterface::class);
+        /** @var StreamInterface $uploadedFileStream3 */
+        $uploadedFileStream3 = $builder->create(StreamInterface::class, []);
 
         $uploadedFileException = new \RuntimeException('test');
 
-        /** @var MockObject|StreamFactoryInterface $streamFactory */
-        $streamFactory = $this->getMockByCalls(StreamFactoryInterface::class, [
-            Call::create('createStreamFromFile')->with('/tmp/php9875842a', 'r')->willReturn($uploadedFileStream1),
-            Call::create('createStreamFromFile')->with('/tmp/php8d5f55ce', 'r')->willReturn($uploadedFileStream2),
-            Call::create('createStreamFromFile')
-                ->with('/tmp/php123a6bf6', 'r')
-                ->willThrowException($uploadedFileException),
-            Call::create('createStream')->with('')->willReturn($uploadedFileStream3),
+        /** @var StreamFactoryInterface $streamFactory */
+        $streamFactory = $builder->create(StreamFactoryInterface::class, [
+            new WithReturn('createStreamFromFile', ['/tmp/php9875842a', 'r'], $uploadedFileStream1),
+            new WithReturn('createStreamFromFile', ['/tmp/php8d5f55ce', 'r'], $uploadedFileStream2),
+            new WithException('createStreamFromFile', ['/tmp/php123a6bf6', 'r'], $uploadedFileException),
+            new WithReturn('createStream', [''], $uploadedFileStream3),
         ]);
 
-        /** @var MockObject|UploadedFileInterface $uploadedFile1 */
-        $uploadedFile1 = $this->getMockByCalls(UploadedFileInterface::class);
+        /** @var UploadedFileInterface $uploadedFile1 */
+        $uploadedFile1 = $builder->create(UploadedFileInterface::class, []);
 
-        /** @var MockObject|UploadedFileInterface $uploadedFile2 */
-        $uploadedFile2 = $this->getMockByCalls(UploadedFileInterface::class);
+        /** @var UploadedFileInterface $uploadedFile2 */
+        $uploadedFile2 = $builder->create(UploadedFileInterface::class, []);
 
-        /** @var MockObject|UploadedFileInterface $uploadedFile3 */
-        $uploadedFile3 = $this->getMockByCalls(UploadedFileInterface::class);
+        /** @var UploadedFileInterface $uploadedFile3 */
+        $uploadedFile3 = $builder->create(UploadedFileInterface::class, []);
 
-        /** @var MockObject|UploadedFileFactoryInterface $uploadedFileFactory */
-        $uploadedFileFactory = $this->getMockByCalls(UploadedFileFactoryInterface::class, [
-            Call::create('createUploadedFile')
-                ->with($uploadedFileStream1, 1_048_576, 0, 'CV.pdf', 'application/pdf')
-                ->willReturn($uploadedFile1),
-            Call::create('createUploadedFile')
-                ->with($uploadedFileStream2, 389120, 0, 'Advanced PHP 2017.pdf', 'application/pdf')
-                ->willReturn($uploadedFile2),
-            Call::create('createUploadedFile')
-                ->with($uploadedFileStream3, 524288, 0, 'Advanced Achitecture 2018.pdf', 'application/pdf')
-                ->willReturn($uploadedFile3),
+        /** @var UploadedFileFactoryInterface $uploadedFileFactory */
+        $uploadedFileFactory = $builder->create(UploadedFileFactoryInterface::class, [
+            new WithReturn('createUploadedFile', [$uploadedFileStream1, 1_048_576, 0, 'CV.pdf', 'application/pdf'], $uploadedFile1),
+            new WithReturn('createUploadedFile', [$uploadedFileStream2, 389120, 0, 'Advanced PHP 2017.pdf', 'application/pdf'], $uploadedFile2),
+            new WithReturn('createUploadedFile', [$uploadedFileStream3, 524288, 0, 'Advanced Achitecture 2018.pdf', 'application/pdf'], $uploadedFile3),
         ]);
 
-        /** @var MockObject|ServerRequestInterface $request */
-        $request = $this->getMockByCalls(ServerRequestInterface::class, [
-            Call::create('withHeader')->with('Content-Type', 'multipart/form-data')->willReturnSelf(),
-            Call::create('withCookieParams')->with($swooleRequest->cookie)->willReturnSelf(),
-            Call::create('withQueryParams')->with($swooleRequest->get)->willReturnSelf(),
-            Call::create('withParsedBody')->with($swooleRequest->post)->willReturnSelf(),
-            Call::create('withUploadedFiles')
-                ->with(new ArgumentCallback(
-                    static function (array $uploadedFiles) use ($uploadedFile1, $uploadedFile2, $uploadedFile3): void {
-                        self::assertArrayHasKey('cv', $uploadedFiles);
+        /** @var ServerRequestInterface $request */
+        $request = $builder->create(ServerRequestInterface::class, [
+            new WithReturnSelf('withHeader', ['Content-Type', 'multipart/form-data']),
+            new WithReturnSelf('withCookieParams', [$swooleRequest->cookie]),
+            new WithReturnSelf('withQueryParams', [$swooleRequest->get]),
+            new WithReturnSelf('withParsedBody', [$swooleRequest->post]),
+            new WithCallback('withUploadedFiles', static function (array $uploadedFiles) use ($uploadedFile1, $uploadedFile2, $uploadedFile3, &$request): ServerRequestInterface {
+                Assert::assertArrayHasKey('cv', $uploadedFiles);
+                Assert::assertSame($uploadedFile1, $uploadedFiles['cv']);
+                Assert::assertArrayHasKey('certificates', $uploadedFiles);
+                Assert::assertCount(2, $uploadedFiles['certificates']);
+                Assert::assertSame($uploadedFile2, $uploadedFiles['certificates'][0]);
+                Assert::assertSame($uploadedFile3, $uploadedFiles['certificates'][1]);
 
-                        self::assertSame($uploadedFile1, $uploadedFiles['cv']);
-
-                        self::assertArrayHasKey('certificates', $uploadedFiles);
-
-                        self::assertCount(2, $uploadedFiles['certificates']);
-
-                        self::assertSame($uploadedFile2, $uploadedFiles['certificates'][0]);
-                        self::assertSame($uploadedFile3, $uploadedFiles['certificates'][1]);
-                    }
-                ))
-                ->willReturnSelf(),
-            Call::create('getBody')->with()->willReturn($requestBody),
+                return $request;
+            }),
+            new WithReturn('getBody', [], $requestBody),
         ]);
 
-        /** @var MockObject|ServerRequestFactoryInterface $serverRequestFactory */
-        $serverRequestFactory = $this->getMockByCalls(ServerRequestFactoryInterface::class, [
-            Call::create('createServerRequest')
-                ->with('POST', '/application', ['REQUEST_METHOD' => 'POST', 'REQUEST_URI' => '/application'])
-                ->willReturn($request),
+        /** @var ServerRequestFactoryInterface $serverRequestFactory */
+        $serverRequestFactory = $builder->create(ServerRequestFactoryInterface::class, [
+            new WithReturn(
+                'createServerRequest',
+                ['POST', '/application', ['REQUEST_METHOD' => 'POST', 'REQUEST_URI' => '/application']],
+                $request
+            ),
         ]);
 
         $psrRequestFactory = new PsrRequestFactory($serverRequestFactory, $streamFactory, $uploadedFileFactory);

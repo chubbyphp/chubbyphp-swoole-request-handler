@@ -18,7 +18,7 @@
     ],
     "require": {
         "php": "^8.2",
-        "ext-swoole": "^5.1.6|6.0.0-RC1|^6.0",
+        "ext-swoole": "^5.1.7|^6.0",
         "dflydev/fig-cookies": "^3.1",
         "psr/http-factory": "^1.1",
         "psr/http-message": "^1.1|^2.0",
@@ -26,15 +26,15 @@
         "psr/log": "^2.0|^3.0.2"
     },
     "require-dev": {
-        "blackfire/php-sdk": "^2.5.4",
+        "blackfire/php-sdk": "^2.5.7",
         "chubbyphp/chubbyphp-dev-helper": "dev-master",
-        "chubbyphp/chubbyphp-mock": "^1.8",
-        "infection/infection": "^0.29.8",
+        "chubbyphp/chubbyphp-mock": "^2.0@dev",
+        "infection/infection": "^0.29.12",
         "php-coveralls/php-coveralls": "^2.7",
         "phpstan/extension-installer": "^1.4.3",
-        "phpstan/phpstan": "^2.0.3",
-        "phpunit/phpunit": "^11.5.0",
-        "swoole/ide-helper": "^5.1.6|^6.0.0-RC1|^6.0"
+        "phpstan/phpstan": "^2.1.6",
+        "phpunit/phpunit": "^11.5.9",
+        "swoole/ide-helper": "^5.1.7|^6.0"
     },
     "autoload": {
         "psr-4": {
