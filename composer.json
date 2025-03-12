@@ -28,7 +28,7 @@
     "require-dev": {
         "blackfire/php-sdk": "^2.5.7",
         "chubbyphp/chubbyphp-dev-helper": "dev-master",
-        "chubbyphp/chubbyphp-mock": "^2.0@dev",
+        "chubbyphp/chubbyphp-mock": "^2.0",
         "infection/infection": "^0.29.12",
         "php-coveralls/php-coveralls": "^2.7",
         "phpstan/extension-installer": "^1.4.3",
