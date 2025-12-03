@@ -17,19 +17,12 @@ use Swoole\Http\Response as SwooleResponse;
 
 final class BlackfireOnRequestAdapter implements OnRequestInterface
 {
-    private Configuration $config;
-
-    private LoggerInterface $logger;
-
     public function __construct(
         private OnRequestInterface $onRequest,
         private Client $client,
-        ?Configuration $config = null,
-        ?LoggerInterface $logger = null
-    ) {
-        $this->config = $config ?? new Configuration();
-        $this->logger = $logger ?? new NullLogger();
-    }
+        private Configuration $config = new Configuration(),
+        private LoggerInterface $logger = new NullLogger()
+    ) {}
 
     public function __invoke(SwooleRequest $swooleRequest, SwooleResponse $swooleResponse): void
     {
