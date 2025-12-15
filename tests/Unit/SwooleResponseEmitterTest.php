@@ -36,7 +36,7 @@ final class SwooleResponseEmitterTest extends TestCase
             new WithReturn('isSeekable', [], true),
             new WithoutReturn('rewind', []),
             new WithReturn('eof', [], false),
-            new WithReturn('read', [256], 'This is the body.'),
+            new WithReturn('read', [131072], 'This is the body.'),
             new WithReturn('eof', [], true),
         ]);
 
@@ -113,7 +113,7 @@ final class SwooleResponseEmitterTest extends TestCase
             new WithReturn('isSeekable', [], true),
             new WithoutReturn('rewind', []),
             new WithReturn('eof', [], false),
-            new WithReturn('read', [256], ''),
+            new WithReturn('read', [131072], ''),
             new WithReturn('eof', [], true),
         ]);
 

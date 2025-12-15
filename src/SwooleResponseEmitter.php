@@ -11,6 +11,10 @@ use Swoole\Http\Response as SwooleResponse;
 
 final class SwooleResponseEmitter implements SwooleResponseEmitterInterface
 {
+    public function __construct(
+        private int $chunkSize = self::DEFAULT_CHUNK_SIZE
+    ) {}
+
     public function emit(ResponseInterface $response, SwooleResponse $swooleResponse): void
     {
         $swooleResponse->status($response->getStatusCode(), $response->getReasonPhrase());
@@ -49,7 +53,7 @@ final class SwooleResponseEmitter implements SwooleResponseEmitterInterface
             return '';
         }
 
-        return str_replace('SameSite=', '', $sameSite->asString());
+        return substr($sameSite->asString(), 9);
     }
 
     private function mapBody(ResponseInterface $response, SwooleResponse $swooleResponse): void
@@ -61,7 +65,7 @@ final class SwooleResponseEmitter implements SwooleResponseEmitterInterface
         }
 
         while (!$body->eof()) {
-            if ('' !== $chunk = $body->read(256)) {
+            if ('' !== $chunk = $body->read($this->chunkSize)) {
                 $swooleResponse->write($chunk);
             }
         }
