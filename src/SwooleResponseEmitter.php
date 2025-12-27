@@ -12,7 +12,7 @@ use Swoole\Http\Response as SwooleResponse;
 final class SwooleResponseEmitter implements SwooleResponseEmitterInterface
 {
     public function __construct(
-        private int $chunkSize = self::DEFAULT_CHUNK_SIZE
+        private readonly int $chunkSize = self::DEFAULT_CHUNK_SIZE
     ) {}
 
     public function emit(ResponseInterface $response, SwooleResponse $swooleResponse): void

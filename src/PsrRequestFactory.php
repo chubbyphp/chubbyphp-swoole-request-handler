@@ -14,9 +14,9 @@ use Swoole\Http\Request as SwooleRequest;
 final class PsrRequestFactory implements PsrRequestFactoryInterface
 {
     public function __construct(
-        private ServerRequestFactoryInterface $serverRequestFactory,
-        private StreamFactoryInterface $streamFactory,
-        private UploadedFileFactoryInterface $uploadedFileFactory
+        private readonly ServerRequestFactoryInterface $serverRequestFactory,
+        private readonly StreamFactoryInterface $streamFactory,
+        private readonly UploadedFileFactoryInterface $uploadedFileFactory
     ) {}
 
     public function create(SwooleRequest $swooleRequest): ServerRequestInterface
