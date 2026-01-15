@@ -36,30 +36,42 @@ final class PsrRequestFactory implements PsrRequestFactoryInterface
         $request = $request->withCookieParams($swooleRequest->cookie ?? []);
         $request = $request->withQueryParams($swooleRequest->get ?? []);
         $request = $request->withParsedBody($swooleRequest->post ?? []);
-        $request = $request->withUploadedFiles($this->uploadedFiles($swooleRequest->files ?? []));
 
-        $request->getBody()->write($swooleRequest->rawContent());
+        /** @var array<string, array{tmp_name?: string, size: null|int, error: int, name: null|string, type: null|string}> $files */
+        $files = $swooleRequest->files ?? [];
+
+        $request = $request->withUploadedFiles($this->uploadedFiles($files));
+
+        if (false !== $rawContent = $swooleRequest->rawContent()) {
+            $request->getBody()->write($rawContent);
+        }
 
         return $request;
     }
 
     /**
-     * @param array<string, array<string, int|string>> $files
+     * @param array<string, array<string, mixed>> $files
      *
-     * @return array<string, UploadedFileInterface>
+     * @return array<string, mixed>
      */
     private function uploadedFiles(array $files): array
     {
         $uploadedFiles = [];
         foreach ($files as $key => $file) {
-            $uploadedFiles[$key] = isset($file['tmp_name']) ? $this->createUploadedFile($file) : $this->uploadedFiles($file);
+            if (isset($file['tmp_name'])) {
+                /** @var array{tmp_name: string, size: null|int, error: int, name: null|string, type: null|string} $file */
+                $uploadedFiles[$key] = $this->createUploadedFile($file);
+            } else {
+                /** @var array<string, array<string, mixed>> $file */
+                $uploadedFiles[$key] = $this->uploadedFiles($file);
+            }
         }
 
         return $uploadedFiles;
     }
 
     /**
-     * @param array<string, int|string> $file
+     * @param array{tmp_name: string, size: null|int, error: int, name: null|string, type: null|string} $file
      */
     private function createUploadedFile(array $file): UploadedFileInterface
     {

@@ -1,14 +1,1 @@
 parameters:
-    ignoreErrors:
-        -
-            message: '#uploadedFiles#'
-            path: %currentWorkingDirectory%/src/PsrRequestFactory.php
-        -
-            message: '#createStreamFromFile#'
-            path: %currentWorkingDirectory%/src/PsrRequestFactory.php
-        -
-            message: '#createUploadedFile#'
-            path: %currentWorkingDirectory%/src/PsrRequestFactory.php
-        -
-            message: '#Parameter \#1 \$string of method Psr\\Http\\Message\\StreamInterface\:\:write\(\) expects string, string\|false given\.#'
-            path: %currentWorkingDirectory%/src/PsrRequestFactory.php
