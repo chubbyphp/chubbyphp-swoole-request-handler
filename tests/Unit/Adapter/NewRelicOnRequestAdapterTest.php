@@ -7,7 +7,7 @@ namespace Chubbyphp\SwooleRequestHandler\Adapter
     final class TestNewRelicStartTransaction
     {
         /**
-         * @var array<int, array>
+         * @var list<array>
          */
         private static array $calls = [];
 
@@ -17,7 +17,7 @@ namespace Chubbyphp\SwooleRequestHandler\Adapter
         }
 
         /**
-         * @return array<int, array>
+         * @return list<array>
          */
         public static function all(): array
         {
@@ -38,7 +38,7 @@ namespace Chubbyphp\SwooleRequestHandler\Adapter
     final class TestNewRelicEndTransaction
     {
         /**
-         * @var array<int, array>
+         * @var list<array>
          */
         private static array $calls = [];
 
@@ -48,7 +48,7 @@ namespace Chubbyphp\SwooleRequestHandler\Adapter
         }
 
         /**
-         * @return array<int, array>
+         * @return list<array>
          */
         public static function all(): array
         {
