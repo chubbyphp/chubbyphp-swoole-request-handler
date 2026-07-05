@@ -26,14 +26,14 @@
         "psr/log": "^2.0|^3.0.2"
     },
     "require-dev": {
-        "blackfire/php-sdk": "^2.5.12",
+        "blackfire/php-sdk": "^3.0",
         "chubbyphp/chubbyphp-dev-helper": "dev-master",
-        "chubbyphp/chubbyphp-mock": "^2.1.2",
-        "infection/infection": "^0.32.3",
+        "chubbyphp/chubbyphp-mock": "^2.2.1",
+        "infection/infection": "^0.34.0",
         "php-coveralls/php-coveralls": "^2.9.1",
         "phpstan/extension-installer": "^1.4.3",
-        "phpstan/phpstan": "^2.1.33",
-        "phpunit/phpunit": "^12.5.6",
+        "phpstan/phpstan": "^2.2.5",
+        "phpunit/phpunit": "^12.5.30",
         "swoole/ide-helper": "^5.1.8|^6.0.2"
     },
     "autoload": {
