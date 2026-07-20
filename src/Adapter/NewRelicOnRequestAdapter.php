@@ -16,8 +16,10 @@ final class NewRelicOnRequestAdapter implements OnRequestInterface
     {
         newrelic_start_transaction($this->appname);
 
-        $this->onRequest->__invoke($swooleRequest, $swooleResponse);
-
-        newrelic_end_transaction();
+        try {
+            $this->onRequest->__invoke($swooleRequest, $swooleResponse);
+        } finally {
+            newrelic_end_transaction();
+        }
     }
 }

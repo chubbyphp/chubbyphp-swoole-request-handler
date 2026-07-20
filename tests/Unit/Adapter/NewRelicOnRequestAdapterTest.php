@@ -110,5 +110,42 @@ namespace Chubbyphp\Tests\SwooleRequestHandler\Unit\Adapter
             self::assertSame([['appname' => 'myapp', 'license' => null]], TestNewRelicStartTransaction::all());
             self::assertSame([['ignore' => false]], TestNewRelicEndTransaction::all());
         }
+
+        public function testInvokeEndsTransactionWhenRequestHandlingFails(): void
+        {
+            TestNewRelicStartTransaction::reset();
+            TestNewRelicEndTransaction::reset();
+
+            $builder = new MockObjectBuilder();
+
+            /** @var SwooleRequest $swooleRequest */
+            $swooleRequest = $builder->create(SwooleRequest::class, []);
+
+            /** @var SwooleResponse $swooleResponse */
+            $swooleResponse = $builder->create(SwooleResponse::class, []);
+
+            $exception = new \RuntimeException('Request handling failed');
+
+            $onRequest = new class($exception) implements OnRequestInterface {
+                public function __construct(private readonly \RuntimeException $exception) {}
+
+                public function __invoke(SwooleRequest $swooleRequest, SwooleResponse $swooleResponse): void
+                {
+                    throw $this->exception;
+                }
+            };
+
+            $adapter = new NewRelicOnRequestAdapter($onRequest, 'myapp');
+
+            try {
+                $adapter($swooleRequest, $swooleResponse);
+                self::fail('Expected the request handler exception to be rethrown.');
+            } catch (\RuntimeException $caughtException) {
+                self::assertSame($exception, $caughtException);
+            }
+
+            self::assertSame([['appname' => 'myapp', 'license' => null]], TestNewRelicStartTransaction::all());
+            self::assertSame([['ignore' => false]], TestNewRelicEndTransaction::all());
+        }
     }
 }
