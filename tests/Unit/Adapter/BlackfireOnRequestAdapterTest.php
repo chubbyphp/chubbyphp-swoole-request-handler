@@ -272,4 +272,44 @@ final class BlackfireOnRequestAdapterTest extends TestCase
         $adapter = new BlackfireOnRequestAdapter($onRequest, $client, $config, $logger);
         $adapter($swooleRequest, $swooleResponse);
     }
+
+    public function testInvokeEndsProbeWhenRequestHandlingFails(): void
+    {
+        $builder = new MockObjectBuilder();
+
+        /** @var SwooleRequest $swooleRequest */
+        $swooleRequest = $builder->create(SwooleRequest::class, []);
+        $swooleRequest->header['x-blackfire-query'] = 'swoole';
+
+        /** @var SwooleResponse $swooleResponse */
+        $swooleResponse = $builder->create(SwooleResponse::class, []);
+
+        $exception = new \RuntimeException('Request handling failed');
+
+        $onRequest = new class($exception) implements OnRequestInterface {
+            public function __construct(private readonly \RuntimeException $exception) {}
+
+            public function __invoke(SwooleRequest $swooleRequest, SwooleResponse $swooleResponse): void
+            {
+                throw $this->exception;
+            }
+        };
+
+        /** @var Configuration $config */
+        $config = $builder->create(Configuration::class, []);
+
+        /** @var Probe $probe */
+        $probe = $builder->create(Probe::class, []);
+
+        /** @var Client $client */
+        $client = $builder->create(Client::class, [
+            new WithReturn('createProbe', [$config, true], $probe),
+            new WithoutReturn('endProbe', [$probe]),
+        ]);
+
+        $adapter = new BlackfireOnRequestAdapter($onRequest, $client, $config);
+
+        $this->expectExceptionObject($exception);
+        $adapter($swooleRequest, $swooleResponse);
+    }
 }

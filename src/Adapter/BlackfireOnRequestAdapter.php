@@ -34,13 +34,13 @@ final class BlackfireOnRequestAdapter implements OnRequestInterface
 
         $probe = $this->startProbe();
 
-        $this->onRequest->__invoke($swooleRequest, $swooleResponse);
-
-        if (!$probe instanceof Probe) {
-            return;
+        try {
+            $this->onRequest->__invoke($swooleRequest, $swooleResponse);
+        } finally {
+            if ($probe instanceof Probe) {
+                $this->endProbe($probe);
+            }
         }
-
-        $this->endProbe($probe);
     }
 
     private function startProbe(): ?Probe
