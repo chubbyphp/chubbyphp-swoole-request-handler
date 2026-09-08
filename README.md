@@ -21,7 +21,14 @@
 
 ## Description
 
-A request handler adapter for swoole, using PSR-7, PSR-15 and PSR-17.
+A request handler adapter for [swoole][2], using PSR-7, PSR-15 and PSR-17.
+
+It turns a [swoole][2] HTTP `Server` into a runtime for any [PSR-15][8] request handler: each incoming
+swoole request is converted into a [PSR-7][9] server request through [PSR-17][10] factories, handed to your
+application, and the returned PSR-7 response is sent back through the swoole response.
+
+Because swoole is a long-running process, your application is bootstrapped once per worker process and then
+serves many requests. This removes the per-request bootstrap cost of a classic PHP-FPM setup.
 
 ## Requirements
 
@@ -33,6 +40,16 @@ A request handler adapter for swoole, using PSR-7, PSR-15 and PSR-17.
  * [psr/http-server-handler][6]: ^1.0.2
  * [psr/log][7]: ^2.0|^3.0.2
 
+## Suggest
+
+Any [PSR-7][9] / [PSR-17][10] implementation can be used, for example:
+
+ * [guzzlehttp/psr7][11] (with [http-interop/http-factory-guzzle][12])
+ * [laminas/laminas-diactoros][13]
+ * [nyholm/psr7][14]
+ * [slim/psr7][15]
+ * [sunrise/http-message][16]
+
 ## Installation
 
 Through [Composer](http://getcomposer.org) as [chubbyphp/chubbyphp-swoole-request-handler][1].
@@ -41,7 +58,17 @@ Through [Composer](http://getcomposer.org) as [chubbyphp/chubbyphp-swoole-reques
 composer require chubbyphp/chubbyphp-swoole-request-handler "^1.6"
 ```
 
+The examples below use [slim/psr7][15] as the PSR-7 / PSR-17 implementation:
+
+```sh
+composer require slim/psr7 "^1.8"
+```
+
 ## Usage
+
+### Basic server
+
+Create a `server.php` and start it with `php server.php`:
 
 ```php
 <?php
@@ -54,19 +81,22 @@ use Chubbyphp\SwooleRequestHandler\OnRequest;
 use Chubbyphp\SwooleRequestHandler\PsrRequestFactory;
 use Chubbyphp\SwooleRequestHandler\SwooleResponseEmitter;
 use Psr\Http\Server\RequestHandlerInterface;
-use Some\Psr17\Factory\ServerRequestFactory;
-use Some\Psr17\Factory\StreamFactory;
-use Some\Psr17\Factory\UploadedFileFactory;
+use Slim\Psr7\Factory\ServerRequestFactory;
+use Slim\Psr7\Factory\StreamFactory;
+use Slim\Psr7\Factory\UploadedFileFactory;
 use Swoole\Http\Server;
 
-$loader = require __DIR__.'/vendor/autoload.php';
+require __DIR__.'/vendor/autoload.php';
 
-/** @var RequestHandlerInterface $app*/
-$app = ...;
+/** @var RequestHandlerInterface $app */
+$app = ...; // your PSR-15 application, bootstrapped once per worker process
 
 $http = new Server('0.0.0.0', 8080);
 
-$http->on('start', function (Server $server): void {
+// number of worker processes, typically the number of CPU cores
+$http->set(['worker_num' => 4]);
+
+$http->on('start', static function (Server $server): void {
     echo 'Swoole http server is started at http://0.0.0.0:8080'.PHP_EOL;
 });
 
@@ -83,7 +113,50 @@ $http->on('request', new OnRequest(
 $http->start();
 ```
 
-### with blackfire
+### Components
+
+The package consists of three small, replaceable parts. Each one has an interface, so you can swap in your own
+implementation where the defaults don't fit.
+
+| Class                    | Interface                         | Responsibility                                                                                              |
+|--------------------------|-----------------------------------|-------------------------------------------------------------------------------------------------------------|
+| `OnRequest`              | `OnRequestInterface`              | Swoole `request` callback: builds the PSR-7 request, calls the PSR-15 handler and emits the response.      |
+| `PsrRequestFactory`      | `PsrRequestFactoryInterface`      | Converts a swoole request into a PSR-7 server request via the given PSR-17 factories.                       |
+| `SwooleResponseEmitter`  | `SwooleResponseEmitterInterface`  | Converts a PSR-7 response into a swoole response and sends it to the client.                                |
+
+`PsrRequestFactory` maps the following data:
+
+ * method, URI and all headers
+ * cookies, query params and the parsed body (form data)
+ * uploaded files, including nested ones (as `UploadedFileInterface` instances)
+ * the raw body, written to the request body stream
+ * server params from swoole's server array, with upper-cased keys (`REQUEST_METHOD`, `REMOTE_ADDR`, ...)
+
+`SwooleResponseEmitter` maps the following data:
+
+ * status code and reason phrase
+ * all headers, with `Set-Cookie` headers translated to swoole cookies (including `SameSite`)
+ * the body, streamed in chunks of 128 KiB by default; pass another chunk size to the constructor to change it
+
+### Long-running process caveats
+
+Swoole keeps the PHP process alive between requests, which differs from PHP-FPM:
+
+ * Superglobals like `$_GET`, `$_POST`, `$_SERVER` or `$_COOKIE` are not populated. Read everything from the
+   PSR-7 request instead.
+ * Anything you keep in static properties or in long-lived services persists across requests. Avoid request
+   specific state in shared objects, or reset it per request.
+ * `REMOTE_ADDR` is the address of the direct peer. If you run behind a reverse proxy,
+   use a middleware such as [chubbyphp/chubbyphp-trusted-proxy][17] to resolve the client IP from headers.
+
+### With Blackfire
+
+`BlackfireOnRequestAdapter` wraps an `OnRequestInterface` and profiles a request whenever the
+`X-Blackfire-Query` header is present, for example when triggered by the Blackfire browser extension or the
+`blackfire curl` command. Requests without that header pass through untouched. The probe is always ended,
+even if the wrapped handler throws.
+
+Requires the `blackfire` extension and the [blackfire/php-sdk][18] package.
 
 ```php
 <?php
@@ -93,20 +166,36 @@ declare(strict_types=1);
 namespace App;
 
 use Blackfire\Client;
+use Blackfire\Profile\Configuration;
 use Chubbyphp\SwooleRequestHandler\Adapter\BlackfireOnRequestAdapter;
-use Chubbyphp\SwooleRequestHandler\OnRequest;
+use Chubbyphp\SwooleRequestHandler\OnRequestInterface;
+use Psr\Log\LoggerInterface;
 
-/** @var OnRequest $onRequest */
+/** @var OnRequestInterface $onRequest */
 $onRequest = ...;
 
-if (extension_loaded('blackfire') {
-    $onRequest = new BlackfireOnRequestAdapter($onRequest, new Client());
+/** @var LoggerInterface $logger */
+$logger = ...;
+
+if (extension_loaded('blackfire')) {
+    $onRequest = new BlackfireOnRequestAdapter(
+        $onRequest,
+        new Client(),
+        new Configuration(), // optional, defaults to new Configuration()
+        $logger              // optional, defaults to a NullLogger; receives Blackfire client errors
+    );
 }
 
 $http->on('request', $onRequest);
 ```
 
-### with newrelic
+### With New Relic
+
+`NewRelicOnRequestAdapter` wraps an `OnRequestInterface` and starts a New Relic transaction for every request.
+The transaction is always ended, even if the wrapped handler throws, so each request is reported separately
+instead of as one endless transaction per worker process.
+
+Requires the `newrelic` extension.
 
 ```php
 <?php
@@ -116,17 +205,19 @@ declare(strict_types=1);
 namespace App;
 
 use Chubbyphp\SwooleRequestHandler\Adapter\NewRelicOnRequestAdapter;
-use Chubbyphp\SwooleRequestHandler\OnRequest;
+use Chubbyphp\SwooleRequestHandler\OnRequestInterface;
 
-/** @var OnRequest $onRequest */
+/** @var OnRequestInterface $onRequest */
 $onRequest = ...;
 
-if (extension_loaded('newrelic') && false !== $name = ini_get('newrelic.appname')) {
-    $onRequest = new NewRelicOnRequestAdapter($onRequest, $name);
+if (extension_loaded('newrelic') && false !== $appname = ini_get('newrelic.appname')) {
+    $onRequest = new NewRelicOnRequestAdapter($onRequest, $appname);
 }
 
 $http->on('request', $onRequest);
 ```
+
+Both adapters implement `OnRequestInterface`, so they can be combined by nesting them.
 
 ## Copyright
 
@@ -139,3 +230,14 @@ $http->on('request', $onRequest);
 [5]: https://packagist.org/packages/psr/http-message
 [6]: https://packagist.org/packages/psr/http-server-handler
 [7]: https://packagist.org/packages/psr/log
+[8]: https://www.php-fig.org/psr/psr-15
+[9]: https://www.php-fig.org/psr/psr-7
+[10]: https://www.php-fig.org/psr/psr-17
+[11]: https://packagist.org/packages/guzzlehttp/psr7
+[12]: https://packagist.org/packages/http-interop/http-factory-guzzle
+[13]: https://packagist.org/packages/laminas/laminas-diactoros
+[14]: https://packagist.org/packages/nyholm/psr7
+[15]: https://packagist.org/packages/slim/psr7
+[16]: https://packagist.org/packages/sunrise/http-message
+[17]: https://packagist.org/packages/chubbyphp/chubbyphp-trusted-proxy
+[18]: https://packagist.org/packages/blackfire/php-sdk
